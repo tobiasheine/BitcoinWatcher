@@ -16,9 +16,18 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 
 
 import java.util.List;
+import java.util.Observable;
+
+import eu.tobiasheine.bitcoinwatcher.api.BpiService;
+import eu.tobiasheine.bitcoinwatcher.model.CurrentPrice;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -46,6 +55,26 @@ public class SettingsActivity extends PreferenceActivity {
         super.onPostCreate(savedInstanceState);
 
         setupSimplePreferencesScreen();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("https://api.coindesk.com/v1")
+                .build();
+
+        BpiService service = restAdapter.create(BpiService.class);
+        service.getCurrentPrice(new Callback<CurrentPrice>() {
+
+            @Override
+            public void success(CurrentPrice currentPrice, Response response) {
+                Log.d("Bitcoin Watcher", ""+currentPrice.getDisclaimer());
+                Log.d("Bitcoin Watcher", "EUR: "+currentPrice.getBpi().getEur().rate);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("Bitcoin Watcher", ""+error);
+            }
+        });
+
     }
 
     /**
