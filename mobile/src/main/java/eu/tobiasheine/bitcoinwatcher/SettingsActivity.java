@@ -65,8 +65,8 @@ public class SettingsActivity extends PreferenceActivity {
 
             @Override
             public void success(CurrentPrice currentPrice, Response response) {
-                Log.d("Bitcoin Watcher", ""+currentPrice.getDisclaimer());
-                Log.d("Bitcoin Watcher", "EUR: "+currentPrice.getBpi().getEur().rate);
+                //Log.d("Bitcoin Watcher", ""+currentPrice.getDisclaimer());
+                //Log.d("Bitcoin Watcher", "EUR: "+currentPrice.getBpi().getEur().rate);
             }
 
             @Override

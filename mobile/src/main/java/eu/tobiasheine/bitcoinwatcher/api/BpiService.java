@@ -10,4 +10,7 @@ public interface BpiService {
     @GET("/bpi/currentprice.json")
     void getCurrentPrice(Callback<CurrentPrice> currentPriceCallback);
 
+    @GET("/bpi/currentprice.json")
+    CurrentPrice getCurrentPrice();
+
 }
