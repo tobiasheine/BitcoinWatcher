@@ -7,6 +7,8 @@ import android.net.Uri;
 
 public class DummyProvider extends ContentProvider {
 
+    public static final String AUTHORITY = "eu.tobiasheine.bitcoinwatcher.content";
+
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         return 0;

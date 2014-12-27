@@ -6,6 +6,8 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.os.Bundle;
 
+import eu.tobiasheine.bitcoinwatcher.sync.DummyProvider;
+
 public class BitcoinWatcherApplication extends Application {
 
     @Override
@@ -22,8 +24,6 @@ public class BitcoinWatcherApplication extends Application {
         ContentResolver.setSyncAutomatically(
                 newAccount, "eu.tobiasheine.bitcoinwatcher.content", true);
 
-        ContentResolver.requestSync(
-                newAccount,"eu.tobiasheine.bitcoinwatcher.content", Bundle.EMPTY);
-
+        ContentResolver.addPeriodicSync(newAccount,DummyProvider.AUTHORITY,Bundle.EMPTY,60);
     }
 }

@@ -6,18 +6,20 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.google.gson.Gson;
 
 import eu.tobiasheine.bitcoinwatcher.api.BpiService;
-import eu.tobiasheine.bitcoinwatcher.model.CurrentPrice;
+import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
+import eu.tobiasheine.bitcoinwatcher.storage.CurrentPriceStorage;
+import eu.tobiasheine.bitcoinwatcher.updater.CurrentPriceUpdater;
 import retrofit.RestAdapter;
 
 public class CurrentPriceSyncAdapter extends AbstractThreadedSyncAdapter {
 
+    private final CurrentPriceUpdater updater;
+
     public CurrentPriceSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        updater = new CurrentPriceUpdater(new CurrentPriceStorage(context), new CurrentPriceNotifier(context));
     }
 
     @Override
@@ -28,11 +30,6 @@ public class CurrentPriceSyncAdapter extends AbstractThreadedSyncAdapter {
                 .build();
 
         BpiService service = restAdapter.create(BpiService.class);
-
-        CurrentPrice currentPrice = service.getCurrentPrice();
-
-        Log.d("Bitcoin Watcher", currentPrice.getDisclaimer());
-
-        String newPrice = new Gson().toJson(currentPrice);
+        updater.updateCurrentPrice(service.getCurrentPrice());
     }
 }
