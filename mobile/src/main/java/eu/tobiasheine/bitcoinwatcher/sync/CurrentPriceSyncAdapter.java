@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import eu.tobiasheine.bitcoinwatcher.api.BpiService;
 import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
+import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 import eu.tobiasheine.bitcoinwatcher.storage.CurrentPriceStorage;
 import eu.tobiasheine.bitcoinwatcher.updater.CurrentPriceUpdater;
 import retrofit.RestAdapter;
@@ -19,7 +20,7 @@ public class CurrentPriceSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public CurrentPriceSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        updater = new CurrentPriceUpdater(new CurrentPriceStorage(context), new CurrentPriceNotifier(context));
+        updater = new CurrentPriceUpdater(new CurrentPriceStorage(context), new CurrentPriceNotifier(context), new Settings(context));
     }
 
     @Override

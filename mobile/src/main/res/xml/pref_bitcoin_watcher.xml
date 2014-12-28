@@ -1,0 +1,36 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Selected Currency">
+        <ListPreference
+            android:key="bitcoin_currency"
+            android:defaultValue="EUR"
+            android:entries="@array/pref_currency_titles"
+            android:entryValues="@array/pref_currency_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_currency" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="Selected Sync Frequency">
+        <ListPreference
+            android:key="sync_frequency"
+            android:defaultValue="15"
+            android:entries="@array/pref_sync_frequency_titles"
+            android:entryValues="@array/pref_sync_frequency_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_sync_frequency" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Current Price Notifications">
+
+        <eu.tobiasheine.bitcoinwatcher.ui.SliderPreference
+            android:key="current_price_limit"
+            android:title="@string/price_limit_slider_title"
+            android:defaultValue="@string/price_limit_slider_default"
+            android:dialogMessage="@string/price_limit_slider_message" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
