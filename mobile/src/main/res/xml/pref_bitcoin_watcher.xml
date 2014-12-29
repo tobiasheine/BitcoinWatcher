@@ -8,29 +8,30 @@
             android:entryValues="@array/pref_currency_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_title_currency" />
+            android:title="@string/pref_currency_title" />
 
     </PreferenceCategory>
 
 
-    <PreferenceCategory android:title="Selected Sync Frequency">
+    <PreferenceCategory android:title="@string/pref_sync_category_title">
         <ListPreference
             android:key="sync_frequency"
             android:defaultValue="15"
             android:entries="@array/pref_sync_frequency_titles"
-            android:entryValues="@array/pref_sync_frequency_values"
+            android:entryValues="@array/pref_sync_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_title_sync_frequency" />
+            android:title="@string/pref_sync_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Current Price Notifications">
+    <PreferenceCategory android:title="@string/pref_price_limit_category_title">
 
         <eu.tobiasheine.bitcoinwatcher.ui.SliderPreference
             android:key="current_price_limit"
-            android:title="@string/price_limit_slider_title"
-            android:defaultValue="@string/price_limit_slider_default"
-            android:dialogMessage="@string/price_limit_slider_message" />
+            android:title="@string/pref_price_limit_slider_title"
+            android:defaultValue="@string/pref_price_limit_slider_default"
+            android:dialogMessage="@string/pref_price_limit_slider_message"
+            android:summary="@array/pref_price_limit_summary"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

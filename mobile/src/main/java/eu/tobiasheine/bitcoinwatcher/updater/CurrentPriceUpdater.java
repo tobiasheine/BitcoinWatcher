@@ -22,6 +22,8 @@ public class CurrentPriceUpdater {
 
         storage.storeNewCurrentPrice(newCurrentPrice);
 
+        notifier.notifyWidget();
+
         if (latestCurrentPrice != null && shouldNotifyAboutPrice(latestCurrentPrice, newCurrentPrice)) {
             notifier.notifyAboutNewCurrentPrice(newCurrentPrice);
         }

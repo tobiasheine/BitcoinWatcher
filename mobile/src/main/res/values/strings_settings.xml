@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- Sync Settings-->
+    <string name="pref_sync_category_title">Price Change Sync Frequency</string>
+    <string name="pref_sync_title">How often do you want to check for a price change?</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>1 minute</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_values">
+        <item>1</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Curency Settings-->
+    <string name="pref_currency_title">Which currency should be used?</string>
+    <string-array name="pref_currency_titles">
+        <item>USD</item>
+        <item>GBP</item>
+        <item>EUR</item>
+    </string-array>
+    <string-array name="pref_currency_values">
+        <item>USD</item>
+        <item>GBP</item>
+        <item>EUR</item>
+    </string-array>
+
+
+    <!-- Price Limit -->
+    <string name="pref_price_limit_category_title">Bitcoin Price Change Notification</string>
+    <string name="pref_price_limit_slider_title">Price Change Notification Limit</string>
+    <item name="pref_price_limit_slider_default" format="float" type="string">0.5</item>
+    <string name="pref_price_limit_slider_message">Choose the price change limit you want to be notified about</string>
+
+    <string-array name="pref_price_limit_summary">
+        <item>10 %</item>
+        <item>20 %</item>
+        <item>30 %</item>
+        <item>40 %</item>
+        <item>50 %</item>
+        <item>60 %</item>
+        <item>70 %</item>
+        <item>80 %</item>
+        <item>90 %</item>
+        <item>100 %</item>
+    </string-array>
+
+</resources>

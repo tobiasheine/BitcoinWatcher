@@ -47,6 +47,18 @@ public class CurrentPriceUpdaterTest extends AndroidTestCase {
         verify(storage).storeNewCurrentPrice(newPrice);
     }
 
+    public void testNotifyWidgetOnUpdate() throws Exception {
+        // given
+        final CurrentPrice newPrice = mock(CurrentPrice.class);
+
+        // when
+        priceUpdater.updateCurrentPrice(newPrice);
+
+        // then
+        verify(notifier).notifyWidget();
+
+    }
+
     public void testNotifyWhenPriceChangeEqualsLimit() throws Exception {
         // given
         int priceLimit = 10;

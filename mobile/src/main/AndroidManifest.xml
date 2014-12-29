@@ -51,6 +51,14 @@
             android:syncable="true"
             android:label="DummyProvider" />
 
+        <receiver android:name=".widget.BitcoinWatcherWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/bitcoin_watcher_appwidget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

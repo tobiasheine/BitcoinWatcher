@@ -6,6 +6,7 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.util.Log;
 
 import eu.tobiasheine.bitcoinwatcher.api.BpiService;
 import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
@@ -20,17 +21,22 @@ public class CurrentPriceSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public CurrentPriceSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        updater = new CurrentPriceUpdater(new CurrentPriceStorage(context), new CurrentPriceNotifier(context), new Settings(context));
+        this.updater = new CurrentPriceUpdater(new CurrentPriceStorage(context), new CurrentPriceNotifier(context), new Settings(context));
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
+        final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://api.coindesk.com/v1")
                 .build();
 
-        BpiService service = restAdapter.create(BpiService.class);
-        updater.updateCurrentPrice(service.getCurrentPrice());
+        final BpiService service = restAdapter.create(BpiService.class);
+
+        try {
+            updater.updateCurrentPrice(service.getCurrentPrice());
+        } catch (Exception e) {
+            Log.e("CurrentPriceSyncAdapter", Log.getStackTraceString(e));
+        }
     }
 }

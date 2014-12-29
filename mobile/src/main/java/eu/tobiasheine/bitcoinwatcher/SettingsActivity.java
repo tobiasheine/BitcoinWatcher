@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 import eu.tobiasheine.bitcoinwatcher.sync.CurrentPriceSynchronization;
 
@@ -13,6 +14,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     private CurrentPriceSynchronization synchronization;
     private Settings settings;
+    private CurrentPriceNotifier notifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         synchronization = new CurrentPriceSynchronization(this);
         settings = new Settings(this);
+        notifier = new CurrentPriceNotifier(this);
 
         synchronization.syncNow();
         synchronization.syncPeriodic(settings.getSyncIntervalInMinutes());
@@ -30,7 +33,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if (key.equals(Settings.KEY_CURRENCY)) {
-            // notify UI
+            notifier.notifyWidget();
         }
 
         if (key.equals(Settings.KEY_SYNC)) {
@@ -58,5 +61,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     public void setSettings(final Settings settings) {
         this.settings = settings;
+    }
+
+    public void setNotifier(final CurrentPriceNotifier notifier) {
+        this.notifier = notifier;
     }
 }

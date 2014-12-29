@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Bitcoin Watcher</string>
+    <string name="bitcoin_watcher_widget_empty_price">waiting for first sync</string>
+    <string name="widget_label_price">Current Rate</string>
+    <string name="widget_label_date">Updated at</string>
 </resources>

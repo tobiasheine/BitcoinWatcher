@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.test.ActivityUnitTestCase;
 
+import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 import eu.tobiasheine.bitcoinwatcher.sync.CurrentPriceSynchronization;
 
@@ -14,8 +15,10 @@ import static org.mockito.Mockito.when;
 public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity> {
 
     private SettingsActivity settingsActivity;
+
     private Settings settings;
     private CurrentPriceSynchronization synchronization;
+    private CurrentPriceNotifier notifier;
 
     public SettingsActivityTest() {
         super(SettingsActivity.class);
@@ -32,11 +35,13 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
 
         settings = mock(Settings.class);
         synchronization = mock(CurrentPriceSynchronization.class);
+        notifier = mock(CurrentPriceNotifier.class);
 
         settingsActivity = getActivity();
 
         settingsActivity.setSettings(settings);
         settingsActivity.setSynchronization(synchronization);
+        settingsActivity.setNotifier(notifier);
 
     }
 
@@ -66,5 +71,13 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
 
         // then
         verify(synchronization).syncPeriodic(syncInterval);
+    }
+
+    public void testWidgetUpdateOnCurrencyChange() throws Exception {
+        // when
+        settingsActivity.onSharedPreferenceChanged(null, Settings.KEY_CURRENCY);
+
+        // then
+        verify(notifier).notifyWidget();
     }
 }
