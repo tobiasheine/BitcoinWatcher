@@ -26,7 +26,7 @@
         </activity>
 
         <service
-            android:name=".sync.CurrentPriceSyncService"
+            android:name=".price_sync.SyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
@@ -37,7 +37,7 @@
         </service>
 
         <service
-            android:name=".sync.AuthenticatorService">
+            android:name=".price_sync.authenticator.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -46,7 +46,7 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <provider android:name=".sync.DummyProvider"
+        <provider android:name=".price_sync.ContentProviderStub"
             android:authorities="eu.tobiasheine.bitcoinwatcher.content"
             android:syncable="true"
             android:label="DummyProvider" />

@@ -1,14 +1,14 @@
-package eu.tobiasheine.bitcoinwatcher.sync;
+package eu.tobiasheine.bitcoinwatcher.price_sync;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-public class CurrentPriceSyncService extends Service{
+public class SyncService extends Service{
 
     private static final Object syncAdapterLock = new Object();
 
-    private CurrentPriceSyncAdapter syncAdapter;
+    private SyncAdapter syncAdapter;
 
     @Override
     public void onCreate() {
@@ -16,7 +16,7 @@ public class CurrentPriceSyncService extends Service{
 
         synchronized (syncAdapterLock) {
             if (syncAdapter == null)
-                syncAdapter = new CurrentPriceSyncAdapter(getApplicationContext(), true);
+                syncAdapter = new SyncAdapter(getApplicationContext(), true);
         }
     }
 

@@ -5,32 +5,32 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import eu.tobiasheine.bitcoinwatcher.model.CurrentPrice;
+import eu.tobiasheine.bitcoinwatcher.models.BitcoinPrice;
 
-public class CurrentPriceStorage {
+public class Storage {
 
     private static final String CURRENT_PRICE_KEY = "current_price_key";
 
     private final SharedPreferences sharedPreferences;
     private final Gson gson;
 
-    public CurrentPriceStorage(final Context context) {
+    public Storage(final Context context) {
         this.sharedPreferences = context.getSharedPreferences("BitcoinWatcher", Context.MODE_PRIVATE);
         gson = new Gson();
     }
 
-    public void storeNewCurrentPrice(final CurrentPrice newCurrentPrice) {
-        String currentPriceAsString = gson.toJson(newCurrentPrice);
+    public void storeNewCurrentPrice(final BitcoinPrice newBitcoinPrice) {
+        String currentPriceAsString = gson.toJson(newBitcoinPrice);
         sharedPreferences.edit().putString(CURRENT_PRICE_KEY, currentPriceAsString).apply();
     }
 
-    public CurrentPrice getLatestCurrentPrice() {
+    public BitcoinPrice getLatestCurrentPrice() {
         final String currentPriceAsString = sharedPreferences.getString(CURRENT_PRICE_KEY, null);
 
         if (currentPriceAsString == null) {
             return null;
         }
 
-        return gson.fromJson(currentPriceAsString, CurrentPrice.class);
+        return gson.fromJson(currentPriceAsString, BitcoinPrice.class);
     }
 }

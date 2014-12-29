@@ -1,8 +1,8 @@
-package eu.tobiasheine.bitcoinwatcher.model;
+package eu.tobiasheine.bitcoinwatcher.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CurrentPriceBpi {
+public class BitcoinPriceBpi {
 
     @SerializedName("USD")
     private BitcoinBpi usd;

@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.sync;
+package eu.tobiasheine.bitcoinwatcher.price_sync.authenticator;
 
 import android.app.Service;
 import android.content.Intent;

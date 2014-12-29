@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.sync;
+package eu.tobiasheine.bitcoinwatcher.price_sync;
 
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
@@ -9,19 +9,18 @@ import android.os.Bundle;
 import android.util.Log;
 
 import eu.tobiasheine.bitcoinwatcher.api.BpiService;
-import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
+import eu.tobiasheine.bitcoinwatcher.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
-import eu.tobiasheine.bitcoinwatcher.storage.CurrentPriceStorage;
-import eu.tobiasheine.bitcoinwatcher.updater.CurrentPriceUpdater;
 import retrofit.RestAdapter;
 
-public class CurrentPriceSyncAdapter extends AbstractThreadedSyncAdapter {
+public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
-    private final CurrentPriceUpdater updater;
+    private final BitcoinPriceHandler priceHandler;
 
-    public CurrentPriceSyncAdapter(Context context, boolean autoInitialize) {
+    public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        this.updater = new CurrentPriceUpdater(new CurrentPriceStorage(context), new CurrentPriceNotifier(context), new Settings(context));
+        this.priceHandler = new BitcoinPriceHandler(new Storage(context), new Notifications(context), new Settings(context));
     }
 
     @Override
@@ -34,7 +33,7 @@ public class CurrentPriceSyncAdapter extends AbstractThreadedSyncAdapter {
         final BpiService service = restAdapter.create(BpiService.class);
 
         try {
-            updater.updateCurrentPrice(service.getCurrentPrice());
+            priceHandler.handleNewBitcoinPrice(service.getCurrentPrice());
         } catch (Exception e) {
             Log.e("CurrentPriceSyncAdapter", Log.getStackTraceString(e));
         }

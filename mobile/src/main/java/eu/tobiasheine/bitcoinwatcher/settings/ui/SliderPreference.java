@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.ui;
+package eu.tobiasheine.bitcoinwatcher.settings.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;

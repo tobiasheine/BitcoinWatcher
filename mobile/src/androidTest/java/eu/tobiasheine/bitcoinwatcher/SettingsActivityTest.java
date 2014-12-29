@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.test.ActivityUnitTestCase;
 
-import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
+import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
-import eu.tobiasheine.bitcoinwatcher.sync.CurrentPriceSynchronization;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -17,8 +17,8 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
     private SettingsActivity settingsActivity;
 
     private Settings settings;
-    private CurrentPriceSynchronization synchronization;
-    private CurrentPriceNotifier notifier;
+    private Synchronization synchronization;
+    private Notifications notifier;
 
     public SettingsActivityTest() {
         super(SettingsActivity.class);
@@ -34,8 +34,8 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
         System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
 
         settings = mock(Settings.class);
-        synchronization = mock(CurrentPriceSynchronization.class);
-        notifier = mock(CurrentPriceNotifier.class);
+        synchronization = mock(Synchronization.class);
+        notifier = mock(Notifications.class);
 
         settingsActivity = getActivity();
 

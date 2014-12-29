@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.notifier;
+package eu.tobiasheine.bitcoinwatcher.price_sync.notifications;
 
 import android.app.NotificationManager;
 import android.appwidget.AppWidgetManager;
@@ -8,25 +8,25 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import eu.tobiasheine.bitcoinwatcher.R;
-import eu.tobiasheine.bitcoinwatcher.model.CurrentPrice;
+import eu.tobiasheine.bitcoinwatcher.models.BitcoinPrice;
 import eu.tobiasheine.bitcoinwatcher.widget.BitcoinWatcherWidgetProvider;
 
-public class CurrentPriceNotifier {
+public class Notifications {
 
     private final NotificationCompat.Builder builder;
     private final NotificationManager notificationManager;
 
     private final Context context;
 
-    public CurrentPriceNotifier(Context context) {
+    public Notifications(Context context) {
         this.builder = new NotificationCompat.Builder(context);
         this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         this.context = context;
     }
 
-    public void notifyAboutNewCurrentPrice(final CurrentPrice currentPrice) {
+    public void notifyAboutNewPrice(final BitcoinPrice bitcoinPrice) {
         builder.setContentTitle("Bitcoin price update")
-                .setContentText("New Price: " + currentPrice.getBpi().getEur().rate)
+                .setContentText("New Price: " + bitcoinPrice.getBpi().getEur().rate)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setVibrate(new long[] {0, 1000, 50, 2000});
 

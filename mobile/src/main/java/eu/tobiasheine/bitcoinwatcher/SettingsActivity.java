@@ -3,27 +3,26 @@ package eu.tobiasheine.bitcoinwatcher;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 
-import eu.tobiasheine.bitcoinwatcher.notifier.CurrentPriceNotifier;
+import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
-import eu.tobiasheine.bitcoinwatcher.sync.CurrentPriceSynchronization;
 
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private CurrentPriceSynchronization synchronization;
+    private Synchronization synchronization;
     private Settings settings;
-    private CurrentPriceNotifier notifier;
+    private Notifications notifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_bitcoin_watcher);
 
-        synchronization = new CurrentPriceSynchronization(this);
+        synchronization = new Synchronization(this);
         settings = new Settings(this);
-        notifier = new CurrentPriceNotifier(this);
+        notifier = new Notifications(this);
 
         synchronization.syncNow();
         synchronization.syncPeriodic(settings.getSyncIntervalInMinutes());
@@ -55,7 +54,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    public void setSynchronization(final CurrentPriceSynchronization synchronization) {
+    public void setSynchronization(final Synchronization synchronization) {
         this.synchronization = synchronization;
     }
 
@@ -63,7 +62,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         this.settings = settings;
     }
 
-    public void setNotifier(final CurrentPriceNotifier notifier) {
+    public void setNotifier(final Notifications notifier) {
         this.notifier = notifier;
     }
 }

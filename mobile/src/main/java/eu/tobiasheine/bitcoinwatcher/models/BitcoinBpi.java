@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.model;
+package eu.tobiasheine.bitcoinwatcher.models;
 
 public class BitcoinBpi {
     public String code;

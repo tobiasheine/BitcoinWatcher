@@ -1,6 +1,6 @@
-package eu.tobiasheine.bitcoinwatcher.model;
+package eu.tobiasheine.bitcoinwatcher.models;
 
-public class CurrentPriceTime {
+public class BitcoinPriceUpdatedAt {
 
     private String updated;
     private String updatedISO;

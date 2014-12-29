@@ -26,7 +26,7 @@
 
     <PreferenceCategory android:title="@string/pref_price_limit_category_title">
 
-        <eu.tobiasheine.bitcoinwatcher.ui.SliderPreference
+        <eu.tobiasheine.bitcoinwatcher.settings.ui.SliderPreference
             android:key="current_price_limit"
             android:title="@string/pref_price_limit_slider_title"
             android:defaultValue="@string/pref_price_limit_slider_default"
