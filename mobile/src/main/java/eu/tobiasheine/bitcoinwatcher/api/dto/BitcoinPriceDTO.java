@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.models;
+package eu.tobiasheine.bitcoinwatcher.api.dto;
 
 /**
  * {
@@ -33,13 +33,13 @@ package eu.tobiasheine.bitcoinwatcher.models;
  }
  }
  */
-public class BitcoinPrice {
+public class BitcoinPriceDTO {
 
-    private BitcoinPriceUpdatedAt time;
+    private BitcoinPriceUpdatedAtDTO time;
     private String disclaimer;
-    private BitcoinPriceBpi bpi;
+    private BitcoinPriceBpiDTO bpi;
 
-    public BitcoinPriceUpdatedAt getTime() {
+    public BitcoinPriceUpdatedAtDTO getTime() {
         return time;
     }
 
@@ -47,7 +47,7 @@ public class BitcoinPrice {
         return disclaimer;
     }
 
-    public BitcoinPriceBpi getBpi() {
+    public BitcoinPriceBpiDTO getBpi() {
         return bpi;
     }
 }

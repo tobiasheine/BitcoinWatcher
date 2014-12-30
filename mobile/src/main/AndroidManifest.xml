@@ -48,8 +48,9 @@
 
         <provider android:name=".price_sync.ContentProviderStub"
             android:authorities="eu.tobiasheine.bitcoinwatcher.content"
+            android:isAlwaysSyncable="true"
             android:syncable="true"
-            android:label="DummyProvider" />
+            android:label="Bitcoin Watcher Provider" />
 
         <receiver android:name=".widget.BitcoinWatcherWidgetProvider" >
             <intent-filter>

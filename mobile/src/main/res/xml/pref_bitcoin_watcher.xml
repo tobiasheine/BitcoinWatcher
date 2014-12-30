@@ -8,7 +8,8 @@
             android:entryValues="@array/pref_currency_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_currency_title" />
+            android:title="@string/pref_currency_title"
+            android:summary="%s"/>
 
     </PreferenceCategory>
 
@@ -16,12 +17,13 @@
     <PreferenceCategory android:title="@string/pref_sync_category_title">
         <ListPreference
             android:key="sync_frequency"
-            android:defaultValue="15"
+            android:defaultValue="60"
             android:entries="@array/pref_sync_frequency_titles"
             android:entryValues="@array/pref_sync_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_sync_title" />
+            android:title="@string/pref_sync_title"
+            android:summary="%s"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_price_limit_category_title">

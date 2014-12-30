@@ -1,11 +1,11 @@
-package eu.tobiasheine.bitcoinwatcher.storage;
+package eu.tobiasheine.bitcoinwatcher.dao.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import eu.tobiasheine.bitcoinwatcher.models.BitcoinPrice;
+import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
 
 public class Storage {
 
@@ -19,18 +19,18 @@ public class Storage {
         gson = new Gson();
     }
 
-    public void storeNewCurrentPrice(final BitcoinPrice newBitcoinPrice) {
-        String currentPriceAsString = gson.toJson(newBitcoinPrice);
+    public void storeNewPrice(final BitcoinPriceDTO newBitcoinPriceDTO) {
+        String currentPriceAsString = gson.toJson(newBitcoinPriceDTO);
         sharedPreferences.edit().putString(CURRENT_PRICE_KEY, currentPriceAsString).apply();
     }
 
-    public BitcoinPrice getLatestCurrentPrice() {
+    public BitcoinPriceDTO getStoredPrice() {
         final String currentPriceAsString = sharedPreferences.getString(CURRENT_PRICE_KEY, null);
 
         if (currentPriceAsString == null) {
             return null;
         }
 
-        return gson.fromJson(currentPriceAsString, BitcoinPrice.class);
+        return gson.fromJson(currentPriceAsString, BitcoinPriceDTO.class);
     }
 }

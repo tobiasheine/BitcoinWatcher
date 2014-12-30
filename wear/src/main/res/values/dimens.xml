@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bitcoin_text_size">20dp</dimen>
+    <dimen name="time_text_size">50dp</dimen>
+    <dimen name="time_distance">5dp</dimen>
+    <dimen name="bitcoin_icon_size">20dp</dimen>
+</resources>

@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.settings;
+package eu.tobiasheine.bitcoinwatcher.core.domain;
 
 public enum Currency {
     USD,

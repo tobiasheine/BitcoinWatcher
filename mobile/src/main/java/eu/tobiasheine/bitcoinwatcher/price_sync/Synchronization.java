@@ -8,24 +8,24 @@ import android.os.Bundle;
 
 public class Synchronization {
 
-    final Account dummyAccount;
+    final Account syncAccount;
 
     public Synchronization(Context context) {
 
-        this.dummyAccount = new Account("dummyaccount", "eu.tobiasheine.bitcoinwatcher");
+        this.syncAccount = new Account("Sync Account", "eu.tobiasheine.bitcoinwatcher");
 
         AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
-        accountManager.addAccountExplicitly(dummyAccount, null, null);
+        accountManager.addAccountExplicitly(syncAccount, null, null);
 
         ContentResolver.setSyncAutomatically(
-                dummyAccount, ContentProviderStub.AUTHORITY, true);
+                syncAccount, ContentProviderStub.AUTHORITY, true);
     }
 
     public void syncNow() {
-        ContentResolver.requestSync(dummyAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY);
+        ContentResolver.requestSync(syncAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY);
     }
 
     public void syncPeriodic(final int intervalInSeconds) {
-        ContentResolver.addPeriodicSync(dummyAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY, intervalInSeconds);
+        ContentResolver.addPeriodicSync(syncAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY, intervalInSeconds);
     }
 }

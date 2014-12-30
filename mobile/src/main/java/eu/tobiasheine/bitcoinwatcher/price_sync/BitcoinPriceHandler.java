@@ -1,37 +1,41 @@
 package eu.tobiasheine.bitcoinwatcher.price_sync;
 
-import eu.tobiasheine.bitcoinwatcher.models.BitcoinPrice;
-import eu.tobiasheine.bitcoinwatcher.storage.Storage;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
+import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 public class BitcoinPriceHandler {
 
     private final Storage storage;
-    private final Notifications notifications;
     private final Settings settings;
+    private final HandheldNotifications handheldNotifications;
+    private final WearableNotifications wearableNotifications;
 
-    public BitcoinPriceHandler(Storage storage, Notifications notifications, Settings settings) {
+    public BitcoinPriceHandler(final Storage storage, final HandheldNotifications handheldNotifications, final Settings settings, final WearableNotifications wearableNotifications) {
         this.storage = storage;
-        this.notifications = notifications;
+        this.handheldNotifications = handheldNotifications;
         this.settings = settings;
+        this.wearableNotifications = wearableNotifications;
     }
 
-    public void handleNewBitcoinPrice(final BitcoinPrice newBitcoinPrice) {
-        final BitcoinPrice latestBitcoinPrice = storage.getLatestCurrentPrice();
+    public void handleNewBitcoinPrice(final BitcoinPriceDTO newBitcoinPriceDTO) {
+        final BitcoinPriceDTO latestBitcoinPriceDTO = storage.getStoredPrice();
 
-        storage.storeNewCurrentPrice(newBitcoinPrice);
+        storage.storeNewPrice(newBitcoinPriceDTO);
 
-        notifications.notifyWidget();
+        handheldNotifications.notifyWidget();
+        wearableNotifications.notifyWearable();
 
-        if (latestBitcoinPrice != null && shouldNotifyAboutPrice(latestBitcoinPrice, newBitcoinPrice)) {
-            notifications.notifyAboutNewPrice(newBitcoinPrice);
+        if (latestBitcoinPriceDTO != null && shouldNotifyAboutPrice(latestBitcoinPriceDTO, newBitcoinPriceDTO)) {
+            handheldNotifications.notifyAboutNewPrice(newBitcoinPriceDTO);
         }
     }
 
-    private boolean shouldNotifyAboutPrice(final BitcoinPrice latestBitcoinPrice, final BitcoinPrice newBitcoinPrice) {
-        final float lastRate = latestBitcoinPrice.getBpi().getEur().rate_float;
-        final float newRate = newBitcoinPrice.getBpi().getEur().rate_float;
+    private boolean shouldNotifyAboutPrice(final BitcoinPriceDTO latestBitcoinPriceDTO, final BitcoinPriceDTO newBitcoinPriceDTO) {
+        final float lastRate = latestBitcoinPriceDTO.getBpi().getEur().rate_float;
+        final float newRate = newBitcoinPriceDTO.getBpi().getEur().rate_float;
 
         final float priceChange = Math.abs(newRate - lastRate);
         final int priceChangeLimitInPercentage = settings.getPriceChangeLimitInPercentage();

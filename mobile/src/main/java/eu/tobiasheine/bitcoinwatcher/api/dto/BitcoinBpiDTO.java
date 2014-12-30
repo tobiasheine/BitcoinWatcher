@@ -1,6 +1,6 @@
-package eu.tobiasheine.bitcoinwatcher.models;
+package eu.tobiasheine.bitcoinwatcher.api.dto;
 
-public class BitcoinBpi {
+public class BitcoinBpiDTO {
     public String code;
     public String symbol;
     public String rate;

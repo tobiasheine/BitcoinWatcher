@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import eu.tobiasheine.bitcoinwatcher.core.domain.Currency;
+
 public class Settings {
 
     public static final String KEY_CURRENCY = "bitcoin_currency";

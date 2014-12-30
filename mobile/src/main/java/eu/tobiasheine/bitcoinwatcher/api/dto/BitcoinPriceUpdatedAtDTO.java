@@ -1,6 +1,6 @@
-package eu.tobiasheine.bitcoinwatcher.models;
+package eu.tobiasheine.bitcoinwatcher.api.dto;
 
-public class BitcoinPriceUpdatedAt {
+public class BitcoinPriceUpdatedAtDTO {
 
     private String updated;
     private String updatedISO;

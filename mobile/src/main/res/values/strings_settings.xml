@@ -39,7 +39,7 @@
     <!-- Price Limit -->
     <string name="pref_price_limit_category_title">Bitcoin Price Change Notification</string>
     <string name="pref_price_limit_slider_title">Price Change Notification Limit</string>
-    <item name="pref_price_limit_slider_default" format="float" type="string">0.5</item>
+    <item name="pref_price_limit_slider_default" format="float" type="string">0.05</item>
     <string name="pref_price_limit_slider_message">Choose the price change limit you want to be notified about</string>
 
     <string-array name="pref_price_limit_summary">

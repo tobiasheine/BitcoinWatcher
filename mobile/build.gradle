@@ -26,8 +26,8 @@ dependencies {
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.squareup.retrofit:retrofit:1.8.0'
-
     androidTestCompile 'org.mockito:mockito-core:1.9.5'
     androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
     androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
+    compile project(':core')
 }

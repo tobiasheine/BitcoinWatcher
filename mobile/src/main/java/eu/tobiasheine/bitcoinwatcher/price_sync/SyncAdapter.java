@@ -8,32 +8,35 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
-import eu.tobiasheine.bitcoinwatcher.api.BpiService;
-import eu.tobiasheine.bitcoinwatcher.storage.Storage;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import eu.tobiasheine.bitcoinwatcher.api.BitcoinPriceApi;
+import eu.tobiasheine.bitcoinwatcher.api.IBitcoinPriceApi;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
-import retrofit.RestAdapter;
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final BitcoinPriceHandler priceHandler;
+    private final IBitcoinPriceApi bitcoinPriceApi;
 
-    public SyncAdapter(Context context, boolean autoInitialize) {
+    public SyncAdapter(final Context context, final boolean autoInitialize, final GoogleApiClient googleApiClient) {
         super(context, autoInitialize);
-        this.priceHandler = new BitcoinPriceHandler(new Storage(context), new Notifications(context), new Settings(context));
+
+        final Storage storage = new Storage(context);
+        final Settings settings = new Settings(context);
+
+        this.priceHandler = new BitcoinPriceHandler(storage, new HandheldNotifications(context), settings, new WearableNotifications(googleApiClient, storage, settings));
+        this.bitcoinPriceApi = new BitcoinPriceApi();
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://api.coindesk.com/v1")
-                .build();
-
-        final BpiService service = restAdapter.create(BpiService.class);
-
         try {
-            priceHandler.handleNewBitcoinPrice(service.getCurrentPrice());
+            priceHandler.handleNewBitcoinPrice(bitcoinPriceApi.getCurrentPrice());
         } catch (Exception e) {
             Log.e("CurrentPriceSyncAdapter", Log.getStackTraceString(e));
         }

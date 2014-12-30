@@ -7,7 +7,7 @@ import android.widget.RemoteViews;
 
 import eu.tobiasheine.bitcoinwatcher.R;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
-import eu.tobiasheine.bitcoinwatcher.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
 import eu.tobiasheine.bitcoinwatcher.widget.ui.BitcoinWatcherViewModelFactory;
 import eu.tobiasheine.bitcoinwatcher.widget.ui.BitcoinWatcherWidgetViewModel;
 
@@ -20,7 +20,7 @@ public class BitcoinWatcherWidgetProvider extends AppWidgetProvider {
         final Settings settings = new Settings(context);
         final Storage storage = new Storage(context);
 
-        final BitcoinWatcherWidgetViewModel viewModel = BitcoinWatcherViewModelFactory.create(context, settings, storage.getLatestCurrentPrice());
+        final BitcoinWatcherWidgetViewModel viewModel = BitcoinWatcherViewModelFactory.create(context, settings, storage.getStoredPrice());
 
         final String currentPrice = viewModel.getCurrentPrice();
         final String updatedAt = viewModel.getUpdatedAt();

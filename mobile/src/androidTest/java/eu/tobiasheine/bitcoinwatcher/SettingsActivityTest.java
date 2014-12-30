@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.test.ActivityUnitTestCase;
 
 import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 import static org.mockito.Mockito.mock;
@@ -18,7 +19,8 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
 
     private Settings settings;
     private Synchronization synchronization;
-    private Notifications notifier;
+    private HandheldNotifications handheldNotifications;
+    private WearableNotifications wearableNotifications;
 
     public SettingsActivityTest() {
         super(SettingsActivity.class);
@@ -35,31 +37,17 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
 
         settings = mock(Settings.class);
         synchronization = mock(Synchronization.class);
-        notifier = mock(Notifications.class);
+        handheldNotifications = mock(HandheldNotifications.class);
+        wearableNotifications = mock(WearableNotifications.class);
 
         settingsActivity = getActivity();
 
         settingsActivity.setSettings(settings);
         settingsActivity.setSynchronization(synchronization);
-        settingsActivity.setNotifier(notifier);
+        settingsActivity.setHandheldNotifications(handheldNotifications);
+        settingsActivity.setWearableNotifications(wearableNotifications);
 
     }
-
-    //TODO: apply test after DI
-    /*
-    public void testFirstTriggerSyncThenSetupPeriodicSync() throws Exception {
-        //given
-        int syncInterval = 20;
-        when(settings.getSyncIntervalInMinutes()).thenReturn(syncInterval);
-
-        // when
-        settingsActivity.onCreate(Bundle.EMPTY);
-
-        // then
-        InOrder order = inOrder(synchronization);
-        order.verify(synchronization).syncNow();
-        order.verify(synchronization).syncPeriodic(syncInterval);
-    }*/
 
     public void testTriggerPeriodicSyncOnSettingChange() throws Exception {
         // given
@@ -78,6 +66,14 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
         settingsActivity.onSharedPreferenceChanged(null, Settings.KEY_CURRENCY);
 
         // then
-        verify(notifier).notifyWidget();
+        verify(handheldNotifications).notifyWidget();
+    }
+
+    public void testWearableUpdateOnCurrencyChange() throws Exception {
+        // when
+        settingsActivity.onSharedPreferenceChanged(null, Settings.KEY_CURRENCY);
+
+        // then
+        verify(wearableNotifications).notifyWearable();
     }
 }

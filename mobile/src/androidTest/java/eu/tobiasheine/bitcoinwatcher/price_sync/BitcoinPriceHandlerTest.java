@@ -2,11 +2,12 @@ package eu.tobiasheine.bitcoinwatcher.price_sync;
 
 import android.test.AndroidTestCase;
 
-import eu.tobiasheine.bitcoinwatcher.models.BitcoinBpi;
-import eu.tobiasheine.bitcoinwatcher.models.BitcoinPrice;
-import eu.tobiasheine.bitcoinwatcher.models.BitcoinPriceBpi;
-import eu.tobiasheine.bitcoinwatcher.storage.Storage;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.Notifications;
+import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinBpiDTO;
+import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceBpiDTO;
+import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 import static org.mockito.Mockito.mock;
@@ -17,8 +18,9 @@ import static org.mockito.Mockito.when;
 public class BitcoinPriceHandlerTest extends AndroidTestCase {
 
     private Storage storage;
-    private Notifications notifications;
+    private HandheldNotifications handheldNotifications;
     private Settings settings;
+    private WearableNotifications wearableNotifications;
 
     private BitcoinPriceHandler priceUpdater;
 
@@ -30,33 +32,35 @@ public class BitcoinPriceHandlerTest extends AndroidTestCase {
         System.setProperty("dexmaker.dexcache", getContext().getCacheDir().getPath());
 
         storage = mock(Storage.class);
-        notifications = mock(Notifications.class);
+        handheldNotifications = mock(HandheldNotifications.class);
+        wearableNotifications = mock(WearableNotifications.class);
         settings = mock(Settings.class);
 
-        priceUpdater = new BitcoinPriceHandler(storage, notifications, settings);
+
+        priceUpdater = new BitcoinPriceHandler(storage, handheldNotifications, settings, wearableNotifications);
     }
 
     public void testStoresNewPriceOnUpdate() throws Exception {
         // given
-        final BitcoinPrice newPrice = mock(BitcoinPrice.class);
+        final BitcoinPriceDTO newPrice = mock(BitcoinPriceDTO.class);
 
         // when
         priceUpdater.handleNewBitcoinPrice(newPrice);
 
         // then
-        verify(storage).storeNewCurrentPrice(newPrice);
+        verify(storage).storeNewPrice(newPrice);
     }
 
-    public void testNotifyWidgetOnUpdate() throws Exception {
+    public void testNotifyWidgetAndWearableOnUpdate() throws Exception {
         // given
-        final BitcoinPrice newPrice = mock(BitcoinPrice.class);
+        final BitcoinPriceDTO newPrice = mock(BitcoinPriceDTO.class);
 
         // when
         priceUpdater.handleNewBitcoinPrice(newPrice);
 
         // then
-        verify(notifications).notifyWidget();
-
+        verify(handheldNotifications).notifyWidget();
+        verify(wearableNotifications).notifyWearable();
     }
 
     public void testNotifyWhenPriceChangeEqualsLimit() throws Exception {
@@ -65,16 +69,16 @@ public class BitcoinPriceHandlerTest extends AndroidTestCase {
         final float lastRate = 150f;
         when(settings.getPriceChangeLimitInPercentage()).thenReturn(priceLimit);
 
-        final BitcoinPrice lastPrice = getCurrentPrice(lastRate);
-        final BitcoinPrice newPrice = getCurrentPrice(lastRate + lastRate / 100 * priceLimit);
+        final BitcoinPriceDTO lastPrice = getCurrentPrice(lastRate);
+        final BitcoinPriceDTO newPrice = getCurrentPrice(lastRate + lastRate / 100 * priceLimit);
 
-        when(storage.getLatestCurrentPrice()).thenReturn(lastPrice);
+        when(storage.getStoredPrice()).thenReturn(lastPrice);
 
         // when
         priceUpdater.handleNewBitcoinPrice(newPrice);
 
         // then
-        verify(notifications).notifyAboutNewPrice(newPrice);
+        verify(handheldNotifications).notifyAboutNewPrice(newPrice);
     }
 
     public void testNotifyWhenPriceChangeIsPositiveAndMoreThanLimit() throws Exception {
@@ -83,16 +87,16 @@ public class BitcoinPriceHandlerTest extends AndroidTestCase {
         final float lastRate = 150f;
         when(settings.getPriceChangeLimitInPercentage()).thenReturn(priceLimit);
 
-        final BitcoinPrice lastPrice = getCurrentPrice(lastRate);
-        final BitcoinPrice newPrice = getCurrentPrice((lastRate + lastRate / 100 * priceLimit) + 10);
+        final BitcoinPriceDTO lastPrice = getCurrentPrice(lastRate);
+        final BitcoinPriceDTO newPrice = getCurrentPrice((lastRate + lastRate / 100 * priceLimit) + 10);
 
-        when(storage.getLatestCurrentPrice()).thenReturn(lastPrice);
+        when(storage.getStoredPrice()).thenReturn(lastPrice);
 
         // when
         priceUpdater.handleNewBitcoinPrice(newPrice);
 
         // then
-        verify(notifications).notifyAboutNewPrice(newPrice);
+        verify(handheldNotifications).notifyAboutNewPrice(newPrice);
     }
 
     public void testNotifyWhenPriceChangeIsNegativeAndMoreThanLimit() throws Exception {
@@ -101,16 +105,16 @@ public class BitcoinPriceHandlerTest extends AndroidTestCase {
         final float lastRate = 150f;
         when(settings.getPriceChangeLimitInPercentage()).thenReturn(priceLimit);
 
-        final BitcoinPrice lastPrice = getCurrentPrice(lastRate);
-        final BitcoinPrice newPrice = getCurrentPrice((lastRate - lastRate / 100 * priceLimit) - 10);
+        final BitcoinPriceDTO lastPrice = getCurrentPrice(lastRate);
+        final BitcoinPriceDTO newPrice = getCurrentPrice((lastRate - lastRate / 100 * priceLimit) - 10);
 
-        when(storage.getLatestCurrentPrice()).thenReturn(lastPrice);
+        when(storage.getStoredPrice()).thenReturn(lastPrice);
 
         // when
         priceUpdater.handleNewBitcoinPrice(newPrice);
 
         // then
-        verify(notifications).notifyAboutNewPrice(newPrice);
+        verify(handheldNotifications).notifyAboutNewPrice(newPrice);
     }
 
     public void testDoNotNotifiyWhenPriceChangeIsBelowLimit() throws Exception {
@@ -119,23 +123,23 @@ public class BitcoinPriceHandlerTest extends AndroidTestCase {
         final float lastRate = 150f;
         when(settings.getPriceChangeLimitInPercentage()).thenReturn(priceLimit);
 
-        final BitcoinPrice lastPrice = getCurrentPrice(lastRate);
-        final BitcoinPrice newPrice = getCurrentPrice((lastRate + lastRate / 100 * priceLimit) - 10);
+        final BitcoinPriceDTO lastPrice = getCurrentPrice(lastRate);
+        final BitcoinPriceDTO newPrice = getCurrentPrice((lastRate + lastRate / 100 * priceLimit) - 10);
 
-        when(storage.getLatestCurrentPrice()).thenReturn(lastPrice);
+        when(storage.getStoredPrice()).thenReturn(lastPrice);
 
         // when
         priceUpdater.handleNewBitcoinPrice(newPrice);
 
         // then
-        verify(notifications, never()).notifyAboutNewPrice(newPrice);
+        verify(handheldNotifications, never()).notifyAboutNewPrice(newPrice);
 
     }
 
-    private BitcoinPrice getCurrentPrice(float lastRate) {
-        final BitcoinPrice lastPrice = mock(BitcoinPrice.class);
-        final BitcoinPriceBpi lastPriceBpi = mock(BitcoinPriceBpi.class);
-        final BitcoinBpi lastPriceBitcoin = new BitcoinBpi();
+    private BitcoinPriceDTO getCurrentPrice(float lastRate) {
+        final BitcoinPriceDTO lastPrice = mock(BitcoinPriceDTO.class);
+        final BitcoinPriceBpiDTO lastPriceBpi = mock(BitcoinPriceBpiDTO.class);
+        final BitcoinBpiDTO lastPriceBitcoin = new BitcoinBpiDTO();
 
         when(lastPrice.getBpi()).thenReturn(lastPriceBpi);
         when(lastPriceBpi.getEur()).thenReturn(lastPriceBitcoin);
