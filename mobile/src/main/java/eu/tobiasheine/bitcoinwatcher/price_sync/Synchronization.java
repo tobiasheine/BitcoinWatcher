@@ -25,7 +25,7 @@ public class Synchronization {
         ContentResolver.requestSync(syncAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY);
     }
 
-    public void syncPeriodic(final int intervalInSeconds) {
-        ContentResolver.addPeriodicSync(syncAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY, intervalInSeconds);
+    public void syncPeriodic(final int intervalInMinutes) {
+        ContentResolver.addPeriodicSync(syncAccount, ContentProviderStub.AUTHORITY, Bundle.EMPTY, intervalInMinutes * 60);
     }
 }
