@@ -100,7 +100,7 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
             bitcoinIcon = Bitmap.createScaledBitmap(unscaledIcon, bitcoinIconSize, bitcoinIconSize, false);
 
-            viewModelFactory = new WatchFaceViewModelFactory(new Storage(getBaseContext()));
+            viewModelFactory = new WatchFaceViewModelFactory(new Storage(getBaseContext()), getBaseContext());
         }
 
         /* handler to update the time once a minute in interactive mode */

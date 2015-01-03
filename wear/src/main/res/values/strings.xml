@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Bitcoin Watcher</string>
     <string name="digital_name">Bitcoin Watcher</string>
+    <string name="watch_face_empty_price_model">waiting</string>
 </resources>

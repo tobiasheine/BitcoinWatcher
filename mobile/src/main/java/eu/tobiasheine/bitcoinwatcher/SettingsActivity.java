@@ -3,25 +3,49 @@ package eu.tobiasheine.bitcoinwatcher;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
 
+import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
 import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
-import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
 
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Synchronization synchronization;
     private Settings settings;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sync:
+                synchronization.syncNow();
+                return true;
+
+            case R.id.disclaimer:
+                // TODO:
+                return true;
+        }
+
+        return false;
+    }
+
     private HandheldNotifications handheldNotifications;
 
     private WearableNotifications wearableNotifications;
     private GoogleApiClient googleApiClient;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings_xml, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +66,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         final Storage storage = new Storage(this);
 
-        wearableNotifications = new WearableNotifications(googleApiClient,storage,settings);
+        wearableNotifications = new WearableNotifications(googleApiClient, storage, settings);
     }
 
     @Override

@@ -1,15 +1,19 @@
 package eu.tobiasheine.bitcoinwatcher.ui;
 
+import android.content.Context;
 import android.text.format.Time;
 
+import eu.tobiasheine.bitcoinwatcher.R;
 import eu.tobiasheine.bitcoinwatcher.Storage;
 
 public class WatchFaceViewModelFactory {
 
     private final Storage storage;
+    private final Context context;
 
-    public WatchFaceViewModelFactory(Storage storage) {
+    public WatchFaceViewModelFactory(Storage storage, Context context) {
         this.storage = storage;
+        this.context = context;
     }
 
     public WatchFaceViewModel createViewModel(final Time time) {
@@ -24,7 +28,7 @@ public class WatchFaceViewModelFactory {
 
         final String bitcoinPriceString;
         if (price < 0 ) {
-            bitcoinPriceString = "not yet synced";
+            bitcoinPriceString = context.getString(R.string.watch_face_empty_price_model);
         }else {
             bitcoinPriceString = bitcoinPrice+" "+bitcoinCurrency;
         }
