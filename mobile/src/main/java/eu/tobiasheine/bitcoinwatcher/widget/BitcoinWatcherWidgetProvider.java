@@ -3,6 +3,7 @@ package eu.tobiasheine.bitcoinwatcher.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.RemoteViews;
 
 import eu.tobiasheine.bitcoinwatcher.R;
@@ -26,6 +27,9 @@ public class BitcoinWatcherWidgetProvider extends AppWidgetProvider {
         final String updatedAt = viewModel.getUpdatedAt();
 
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.bitcoin_watcher_appwidget);
+
+        //views.setInt(R.id.tvCurrentPrice,"setGravity", Gravity.END);
+        //views.setInt(R.id.tvUpdatedAt,"setGravity", Gravity.END);
 
         views.setTextViewText(R.id.tvCurrentPrice, currentPrice);
         views.setTextViewText(R.id.tvUpdatedAt, updatedAt);

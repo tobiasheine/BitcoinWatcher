@@ -48,7 +48,6 @@ MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.google.android.gms:play-services:6.5.87:20:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
-MERGED from AndroidManifest.xml:4:5
 	android:label
 		ADDED from AndroidManifest.xml:19:9
 	android:allowBackup
@@ -153,16 +152,9 @@ MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.google.android.gms:play-services:6.5.87:18:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
-MERGED from AndroidManifest.xml:3:13
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
 	android:minSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-meta-data#com.google.android.wearable.beta.app
-ADDED from AndroidManifest.xml:5:9
-	android:resource
-		ADDED from AndroidManifest.xml:6:20
-	android:name
-		ADDED from AndroidManifest.xml:5:20
