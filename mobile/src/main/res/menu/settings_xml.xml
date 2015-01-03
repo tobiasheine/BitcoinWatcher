@@ -4,7 +4,7 @@
         android:id="@+id/sync"
         android:title="Sync now"/>
 
-    <item
+    <!--item
         android:id="@+id/disclaimer"
-        android:title="Disclaimer and Licenses"/>
+        android:title="Disclaimer and Licenses"/-->
 </menu>

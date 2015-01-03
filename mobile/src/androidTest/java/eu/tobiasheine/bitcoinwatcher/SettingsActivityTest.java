@@ -3,6 +3,7 @@ package eu.tobiasheine.bitcoinwatcher;
 import android.content.Intent;
 import android.os.Bundle;
 import android.test.ActivityUnitTestCase;
+import android.view.MenuItem;
 
 import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
@@ -11,6 +12,7 @@ import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity> {
@@ -75,5 +77,18 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
 
         // then
         verify(wearableNotifications).notifyWearable();
+    }
+
+    public void testSyncOnMenuEntry() throws Exception {
+        // given
+        final MenuItem menuItem = mock(MenuItem.class);
+        when(menuItem.getItemId()).thenReturn(R.id.sync);
+
+        // when
+        settingsActivity.onOptionsItemSelected(menuItem);
+
+        // then
+        verify(synchronization).syncNow();
+
     }
 }

@@ -28,9 +28,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 synchronization.syncNow();
                 return true;
 
-            case R.id.disclaimer:
+            /*case R.id.disclaimer:
                 // TODO:
-                return true;
+                return true;*/
         }
 
         return false;
