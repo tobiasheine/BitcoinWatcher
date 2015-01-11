@@ -3,4 +3,5 @@
     <string name="bitcoin_watcher_widget_empty_price">Wait for sync</string>
     <string name="widget_label_price">Current Rate</string>
     <string name="widget_label_date">Updated at</string>
+    <string name="widget_title">Bitcoin Watcher</string>
 </resources>
