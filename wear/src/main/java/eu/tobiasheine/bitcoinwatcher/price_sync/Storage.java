@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher;
+package eu.tobiasheine.bitcoinwatcher.price_sync;
 
 import android.content.Context;
 import android.content.SharedPreferences;

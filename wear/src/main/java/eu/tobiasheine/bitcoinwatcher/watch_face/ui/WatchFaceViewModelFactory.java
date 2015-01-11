@@ -1,10 +1,10 @@
-package eu.tobiasheine.bitcoinwatcher.ui;
+package eu.tobiasheine.bitcoinwatcher.watch_face.ui;
 
 import android.content.Context;
 import android.text.format.Time;
 
 import eu.tobiasheine.bitcoinwatcher.R;
-import eu.tobiasheine.bitcoinwatcher.Storage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.Storage;
 
 public class WatchFaceViewModelFactory {
 

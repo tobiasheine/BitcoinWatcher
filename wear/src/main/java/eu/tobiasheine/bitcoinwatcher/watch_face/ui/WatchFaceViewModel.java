@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher.ui;
+package eu.tobiasheine.bitcoinwatcher.watch_face.ui;
 
 public class WatchFaceViewModel {
 

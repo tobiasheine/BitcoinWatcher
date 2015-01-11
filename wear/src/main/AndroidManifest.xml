@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_launcher">
 
         <service
-            android:name=".BitcoinWatchFaceService"
+            android:name=".watch_face.BitcoinWatchFaceService"
             android:label="@string/digital_name"
             android:allowEmbedded="true"
             android:taskAffinity=""
@@ -33,7 +33,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".BitcoinPriceListener">
+        <service android:name=".price_sync.BitcoinPriceChangeListener">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>

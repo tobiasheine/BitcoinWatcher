@@ -1,4 +1,4 @@
-package eu.tobiasheine.bitcoinwatcher;
+package eu.tobiasheine.bitcoinwatcher.watch_face;
 
 
 import android.content.BroadcastReceiver;
@@ -20,11 +20,17 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
 import android.view.SurfaceHolder;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Wearable;
+
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import eu.tobiasheine.bitcoinwatcher.ui.WatchFaceViewModel;
-import eu.tobiasheine.bitcoinwatcher.ui.WatchFaceViewModelFactory;
+import eu.tobiasheine.bitcoinwatcher.R;
+import eu.tobiasheine.bitcoinwatcher.price_sync.Storage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.PullPriceTask;
+import eu.tobiasheine.bitcoinwatcher.watch_face.ui.WatchFaceViewModel;
+import eu.tobiasheine.bitcoinwatcher.watch_face.ui.WatchFaceViewModelFactory;
 
 public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
@@ -33,6 +39,8 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
     private static final long UPDATE_RATE_MS = TimeUnit.MINUTES.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
+    private GoogleApiClient googleApiClient;
+    private Storage storage;
 
     @Override
     public Engine onCreateEngine() {
@@ -66,6 +74,7 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
         private int bitcoinIconSize;
 
         private WatchFaceViewModelFactory viewModelFactory;
+        private PullPriceTask pullPriceTask;
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -100,7 +109,13 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
             bitcoinIcon = Bitmap.createScaledBitmap(unscaledIcon, bitcoinIconSize, bitcoinIconSize, false);
 
-            viewModelFactory = new WatchFaceViewModelFactory(new Storage(getBaseContext()), getBaseContext());
+            googleApiClient = new GoogleApiClient.Builder(getBaseContext())
+                    .addApi(Wearable.API)
+                    .build();
+            googleApiClient.connect();
+
+            storage = new Storage(getBaseContext());
+            viewModelFactory = new WatchFaceViewModelFactory(storage, getBaseContext());
         }
 
         /* handler to update the time once a minute in interactive mode */
@@ -109,6 +124,16 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
             public void handleMessage(Message message) {
                 switch (message.what) {
                     case MSG_UPDATE_TIME:
+
+                        if (storage.getPrice() < 0) {
+                            if (pullPriceTask != null) {
+                                pullPriceTask.cancel(true);
+                            }
+
+                            pullPriceTask = new PullPriceTask(googleApiClient, storage);
+                            pullPriceTask.execute();
+                        }
+
                         invalidate();
                         if (!isInAmbientMode()) {
                             long timeMs = System.currentTimeMillis();
@@ -185,8 +210,12 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
         @Override
         public void onDestroy() {
-            updateTimeHandler.removeMessages(MSG_UPDATE_TIME);
             super.onDestroy();
+            updateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+
+            if (googleApiClient.isConnected()) {
+                googleApiClient.disconnect();
+            }
         }
 
         @Override
@@ -229,7 +258,7 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
             // draw bitcoin price
             float magicalOffsetToAlignTextWithIcon = distanceHourMinute / 2;
-            canvas.drawBitmap(bitcoinIcon, bitcoinIconX, bounds.bottom - bitcoinIconSize*2 + magicalOffsetToAlignTextWithIcon, new Paint());
+            canvas.drawBitmap(bitcoinIcon, bitcoinIconX, bounds.bottom - bitcoinIconSize * 2 + magicalOffsetToAlignTextWithIcon, new Paint());
             canvas.drawText(viewModel.bitcoinPriceString, bitcoinIconX + bitcoinIconSize, bounds.bottom - bitcoinIconSize, bitcoinPricePaint);
         }
     }

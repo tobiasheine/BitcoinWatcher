@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.io.IOException;
@@ -28,16 +30,17 @@ public class WearableNotifications {
         this.notifyingRunnable = new Runnable() {
             @Override
             public void run() {
-                final List<Node> connectedNodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await().getNodes();
 
                 final BitcoinPrice bitcoinPrice = getBitcoinPrice(settings, storage);
 
                 try {
                     final byte[] priceInBytes = converter.convertToByte(bitcoinPrice);
 
-                    for (Node node : connectedNodes) {
-                        Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), "shared price", priceInBytes).await().getStatus();
-                    }
+                    PutDataRequest priceDataMap = PutDataRequest.create("/price");
+                    priceDataMap.setData(priceInBytes);
+
+                    Wearable.DataApi.putDataItem(googleApiClient, priceDataMap);
+
                 } catch (IOException e) {
                     Log.e("WearableNotifications", Log.getStackTraceString(e));
                 }
@@ -69,7 +72,6 @@ public class WearableNotifications {
     }
 
     public void notifyWearable() {
-
         if ((Looper.myLooper() == Looper.getMainLooper())) {
             new Thread(notifyingRunnable).start();
         } else {
