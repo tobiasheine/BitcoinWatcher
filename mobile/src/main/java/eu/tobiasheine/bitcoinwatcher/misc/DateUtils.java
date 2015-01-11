@@ -16,7 +16,7 @@ public class DateUtils {
         final DateFormat inputFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss zz", Locale.ENGLISH);
         inputFormat.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
         final Date date = inputFormat.parse(bitcoinPriceDTO.getTime().getUpdated());
-        final DateFormat outputFormat = new SimpleDateFormat("HH:mm / dd.MM yyy");
+        final DateFormat outputFormat = new SimpleDateFormat("HH:mm / dd.MM.yyy");
         outputFormat.setTimeZone(Calendar.getInstance().getTimeZone());
         return outputFormat.format(date);
     }

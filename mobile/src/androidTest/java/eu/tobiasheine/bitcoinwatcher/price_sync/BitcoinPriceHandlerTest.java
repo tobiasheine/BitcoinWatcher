@@ -28,14 +28,10 @@ public class BitcoinPriceHandlerTest extends AndroidTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        // http://stackoverflow.com/questions/12267572/mockito-dexmaker-on-android
-        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().getPath());
-
         storage = mock(Storage.class);
         handheldNotifications = mock(HandheldNotifications.class);
         wearableNotifications = mock(WearableNotifications.class);
         settings = mock(Settings.class);
-
 
         priceUpdater = new BitcoinPriceHandler(storage, handheldNotifications, settings, wearableNotifications);
     }

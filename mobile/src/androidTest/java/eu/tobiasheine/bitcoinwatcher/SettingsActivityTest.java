@@ -34,9 +34,6 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
 
         startActivity(new Intent(), Bundle.EMPTY, null);
 
-        // http://stackoverflow.com/questions/12267572/mockito-dexmaker-on-android
-        System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
-
         settings = mock(Settings.class);
         synchronization = mock(Synchronization.class);
         handheldNotifications = mock(HandheldNotifications.class);

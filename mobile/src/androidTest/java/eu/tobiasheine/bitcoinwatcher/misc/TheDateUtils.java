@@ -10,12 +10,6 @@ import static org.mockito.Mockito.when;
 
 public class TheDateUtils extends AndroidTestCase {
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().getPath());
-    }
-
     public void testConvertsDateForWidget() throws Exception {
         // given
         final String dateString = "Dec 31, 2014 11:04:00 UTC";
@@ -29,6 +23,6 @@ public class TheDateUtils extends AndroidTestCase {
         String convertedString = DateUtils.convertCurrentPriceStringForWidget(price);
 
         // then
-        assertEquals("12:04 / 31.12.2014", convertedString);
+        assertEquals("11:04 / 31.12.2014", convertedString);
     }
 }
