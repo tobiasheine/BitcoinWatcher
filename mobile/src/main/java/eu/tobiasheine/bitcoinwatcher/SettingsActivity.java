@@ -42,7 +42,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 .addApi(Wearable.API)
                 .build();
 
-
+        settings = new Settings(this);
         wearableNotifications = new WearableNotifications(googleApiClient, new Storage(this), settings);
     }
 

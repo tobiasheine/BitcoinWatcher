@@ -15,7 +15,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class BitcoinPriceHandlerTest extends AndroidTestCase {
+public class TheBitcoinPriceHandler extends AndroidTestCase {
 
     private Storage storage;
     private HandheldNotifications handheldNotifications;
