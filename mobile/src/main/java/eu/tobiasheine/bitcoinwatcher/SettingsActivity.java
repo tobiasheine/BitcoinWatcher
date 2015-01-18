@@ -6,24 +6,31 @@ import android.preference.PreferenceActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.Wearable;
+import javax.inject.Inject;
 
-import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
+import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
+import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Synchronization synchronization;
-    private Settings settings;
-    private HandheldNotifications handheldNotifications;
-    private WearableNotifications wearableNotifications;
+    @Inject
+    IWearableNotifications wearableNotifications;
 
-    private GoogleApiClient googleApiClient;
+    @Inject
+    HandheldNotifications handheldNotifications;
+
+    @Inject
+    ISynchronization synchronization;
+
+    @Inject
+    ISettings settings;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,15 +43,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_bitcoin_watcher);
 
-        handheldNotifications = new HandheldNotifications(this);
-
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .build();
-
-        synchronization = new Synchronization(this);
-        settings = new Settings(this);
-        wearableNotifications = new WearableNotifications(googleApiClient, new Storage(this), settings);
+        final Dependencies dependencies = BitcoinWatcherApplication.getDependencies();
+        dependencies.inject(this);
     }
 
     @Override
@@ -81,9 +81,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
 
-        if (!googleApiClient.isConnected()) {
-            googleApiClient.connect();
-        }
+        wearableNotifications.connect();
     }
 
     @Override
@@ -92,10 +90,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
 
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
-
+        wearableNotifications.disconnect();
     }
 
     public void setSynchronization(final Synchronization synchronization) {

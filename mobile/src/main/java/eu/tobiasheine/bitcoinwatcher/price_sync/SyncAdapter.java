@@ -22,13 +22,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private final BitcoinPriceHandler priceHandler;
     private final IBitcoinPriceApi bitcoinPriceApi;
 
-    public SyncAdapter(final Context context, final boolean autoInitialize, final GoogleApiClient googleApiClient) {
+    public SyncAdapter(final Context context, final boolean autoInitialize, final BitcoinPriceHandler priceHandler) {
         super(context, autoInitialize);
 
-        final Storage storage = new Storage(context);
-        final Settings settings = new Settings(context);
-
-        this.priceHandler = new BitcoinPriceHandler(storage, new HandheldNotifications(context), settings, new WearableNotifications(googleApiClient, storage, settings));
+        this.priceHandler = priceHandler;
         this.bitcoinPriceApi = new BitcoinPriceApi();
     }
 

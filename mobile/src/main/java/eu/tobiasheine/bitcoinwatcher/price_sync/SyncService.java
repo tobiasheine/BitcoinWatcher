@@ -4,20 +4,29 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.Wearable;
+import javax.inject.Inject;
+
+import eu.tobiasheine.bitcoinwatcher.BitcoinWatcherApplication;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
+import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
+import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 
 public class SyncService extends Service{
 
     private static final Object syncServiceLock = new Object();
 
+    @Inject
+    ISynchronization synchronization;
+
+    @Inject
+    IWearableNotifications wearableNotifications;
+
     private SyncAdapter syncAdapter;
-    private GoogleApiClient googleApiClient;
-    private Synchronization synchronization;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         synchronization.syncNow();
 
         return super.onStartCommand(intent, flags, startId);
@@ -27,21 +36,23 @@ public class SyncService extends Service{
     public void onCreate() {
         super.onCreate();
 
-        synchronized (syncServiceLock) {
-            if (googleApiClient == null) {
-                googleApiClient = new GoogleApiClient.Builder(this)
-                        .addApi(Wearable.API)
-                        .build();
+        final Dependencies dependencies = BitcoinWatcherApplication.getDependencies();
+        dependencies.inject(this);
 
-                googleApiClient.connect();
-            }
+        wearableNotifications.connect();
+
+        final IStorage storage = dependencies.getStorage();
+        final IHandheldNotifications handheldNotifications = dependencies.getHandheldNotifications();
+        final ISettings settings = dependencies.getSettings();
+
+        final BitcoinPriceHandler bitcoinPriceHandler = new BitcoinPriceHandler(storage, handheldNotifications, settings, wearableNotifications);
+
+        synchronized (syncServiceLock) {
 
             if (syncAdapter == null) {
-                syncAdapter = new SyncAdapter(getApplicationContext(), true, googleApiClient);
+                syncAdapter = new SyncAdapter(getApplicationContext(), true, bitcoinPriceHandler);
             }
         }
-
-        synchronization = new Synchronization(getBaseContext());
     }
 
     @Override
@@ -53,8 +64,6 @@ public class SyncService extends Service{
     public void onDestroy() {
         super.onDestroy();
 
-        if (googleApiClient != null && googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
+        wearableNotifications.disconnect();
     }
 }

@@ -7,8 +7,14 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
+import javax.inject.Inject;
+
+import eu.tobiasheine.bitcoinwatcher.BitcoinWatcherApplication;
 import eu.tobiasheine.bitcoinwatcher.R;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
+import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 import eu.tobiasheine.bitcoinwatcher.widget.ui.BitcoinWatcherViewModelFactory;
 import eu.tobiasheine.bitcoinwatcher.widget.ui.BitcoinWatcherWidgetViewModel;
@@ -16,12 +22,17 @@ import eu.tobiasheine.bitcoinwatcher.widget.ui.WidgetRemoteViewAdapter;
 
 public class BitcoinWatcherWidgetProvider extends AppWidgetProvider {
 
-    private Settings settings;
-    private Storage storage;
+    @Inject
+    ISettings settings;
+
+    @Inject
+    IStorage storage;
+
     private WidgetRemoteViewAdapter remoteViewAdapter;
 
     public BitcoinWatcherWidgetProvider() {
         super();
+        BitcoinWatcherApplication.getDependencies().inject(this);
         remoteViewAdapter = new WidgetRemoteViewAdapter();
     }
 
@@ -35,14 +46,6 @@ public class BitcoinWatcherWidgetProvider extends AppWidgetProvider {
 
     public void setRemoteViewAdapter(WidgetRemoteViewAdapter remoteViewAdapter) {
         this.remoteViewAdapter = remoteViewAdapter;
-    }
-
-    @Override
-    public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-        settings = new Settings(context);
-        storage = new Storage(context);
-
-        super.onReceive(context, intent);
     }
 
     @Override

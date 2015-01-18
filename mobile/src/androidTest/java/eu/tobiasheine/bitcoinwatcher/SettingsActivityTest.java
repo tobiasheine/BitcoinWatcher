@@ -9,6 +9,7 @@ import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
+import eu.tobiasheine.bitcoinwatcher.widget.ui.BitcoinWatcherWidgetViewModel;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -31,6 +32,9 @@ public class SettingsActivityTest extends ActivityUnitTestCase<SettingsActivity>
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
+
+
 
         startActivity(new Intent(), Bundle.EMPTY, null);
 

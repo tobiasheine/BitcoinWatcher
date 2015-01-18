@@ -1,19 +1,23 @@
 package eu.tobiasheine.bitcoinwatcher.price_sync;
 
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 public class BitcoinPriceHandler {
 
-    private final Storage storage;
-    private final Settings settings;
-    private final HandheldNotifications handheldNotifications;
-    private final WearableNotifications wearableNotifications;
+    private final IStorage storage;
+    private final ISettings settings;
+    private final IHandheldNotifications handheldNotifications;
+    private final IWearableNotifications wearableNotifications;
 
-    public BitcoinPriceHandler(final Storage storage, final HandheldNotifications handheldNotifications, final Settings settings, final WearableNotifications wearableNotifications) {
+    public BitcoinPriceHandler(final IStorage storage, final IHandheldNotifications handheldNotifications, final ISettings settings, final IWearableNotifications wearableNotifications) {
         this.storage = storage;
         this.handheldNotifications = handheldNotifications;
         this.settings = settings;

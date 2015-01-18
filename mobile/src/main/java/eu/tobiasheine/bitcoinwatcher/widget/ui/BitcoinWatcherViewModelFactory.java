@@ -7,11 +7,12 @@ import eu.tobiasheine.bitcoinwatcher.R;
 import eu.tobiasheine.bitcoinwatcher.misc.DateUtils;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
 import eu.tobiasheine.bitcoinwatcher.core.domain.Currency;
+import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 public class BitcoinWatcherViewModelFactory {
 
-    public static BitcoinWatcherWidgetViewModel create(final Context context, final Settings settings, final BitcoinPriceDTO bitcoinPriceDTO) {
+    public static BitcoinWatcherWidgetViewModel create(final Context context, final ISettings settings, final BitcoinPriceDTO bitcoinPriceDTO) {
 
         if (bitcoinPriceDTO == null) {
             return createEmptyViewModel(context);
