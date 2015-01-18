@@ -8,8 +8,8 @@ android {
         applicationId "eu.tobiasheine.bitcoinwatcher"
         minSdkVersion 19
         targetSdkVersion 21
-        versionCode 4
-        versionName "0.0.4"
+        versionCode 5
+        versionName "0.0.5"
 
         testInstrumentationRunner 'eu.tobiasheine.bitcoinwatcher.DexCacheInstrumentationRunner'
     }
