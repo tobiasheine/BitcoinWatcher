@@ -6,15 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
@@ -24,23 +18,16 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
-import eu.tobiasheine.bitcoinwatcher.R;
 import eu.tobiasheine.bitcoinwatcher.price_sync.Storage;
-import eu.tobiasheine.bitcoinwatcher.price_sync.PullPriceTask;
+import eu.tobiasheine.bitcoinwatcher.watch_face.ui.WatchFaceDrawer;
+import eu.tobiasheine.bitcoinwatcher.watch_face.ui.WatchFaceTimer;
 import eu.tobiasheine.bitcoinwatcher.watch_face.ui.WatchFaceViewModel;
 import eu.tobiasheine.bitcoinwatcher.watch_face.ui.WatchFaceViewModelFactory;
 
 public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
-    private static final Typeface NORMAL_TYPEFACE =
-            Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
-
-    private static final long UPDATE_RATE_MS = TimeUnit.MINUTES.toMillis(1);
-    private static final int MSG_UPDATE_TIME = 0;
     private GoogleApiClient googleApiClient;
-    private Storage storage;
 
     @Override
     public Engine onCreateEngine() {
@@ -59,22 +46,11 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
         private boolean isTimeZoneReceiverRegistered = false;
 
-        private Paint backgroundPaint;
-        private Paint timePaint;
-        private Paint bitcoinPricePaint;
-
-        private Time time;
-
-        private float distanceHourMinute;
-
-        private int ambientBgColor;
-        private int interactiveBgColor;
-
-        private Bitmap bitcoinIcon;
-        private int bitcoinIconSize;
+        private final Time time = new Time();
 
         private WatchFaceViewModelFactory viewModelFactory;
-        private PullPriceTask pullPriceTask;
+        private WatchFaceTimer watchFaceTimer;
+        private WatchFaceDrawer drawer;
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -85,78 +61,22 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
                     .setShowSystemUiTime(false)
                     .build());
+
             Resources resources = BitcoinWatchFaceService.this.getResources();
 
-            distanceHourMinute = resources.getDimension(R.dimen.time_distance);
-
-            backgroundPaint = new Paint();
-
-            ambientBgColor = Color.parseColor("black");
-            interactiveBgColor = getResources().getColor(android.R.color.holo_orange_light);
-
-            backgroundPaint.setColor(ambientBgColor);
-
-            timePaint = createTextPaint(Color.parseColor("white"), Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-            timePaint.setTextSize(resources.getDimension(R.dimen.time_text_size));
-
-            bitcoinPricePaint = createTextPaint(Color.parseColor("white"));
-            bitcoinPricePaint.setTextSize(resources.getDimension(R.dimen.bitcoin_text_size));
-
-            time = new Time();
-
-            final Bitmap unscaledIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-            bitcoinIconSize = (int) getResources().getDimension(R.dimen.bitcoin_icon_size);
-
-            bitcoinIcon = Bitmap.createScaledBitmap(unscaledIcon, bitcoinIconSize, bitcoinIconSize, false);
 
             googleApiClient = new GoogleApiClient.Builder(getBaseContext())
                     .addApi(Wearable.API)
                     .build();
+
             googleApiClient.connect();
 
-            storage = new Storage(getBaseContext());
+            Storage storage = new Storage(getBaseContext());
             viewModelFactory = new WatchFaceViewModelFactory(storage, getBaseContext());
-        }
 
-        /* handler to update the time once a minute in interactive mode */
-        final Handler updateTimeHandler = new Handler() {
-            @Override
-            public void handleMessage(Message message) {
-                switch (message.what) {
-                    case MSG_UPDATE_TIME:
+            watchFaceTimer = new WatchFaceTimer(this, storage, googleApiClient);
 
-                        if (storage.getPrice() < 0) {
-                            if (pullPriceTask != null) {
-                                pullPriceTask.cancel(true);
-                            }
-
-                            pullPriceTask = new PullPriceTask(googleApiClient, storage);
-                            pullPriceTask.execute();
-                        }
-
-                        invalidate();
-                        if (!isInAmbientMode()) {
-                            long timeMs = System.currentTimeMillis();
-                            long delayMs = UPDATE_RATE_MS
-                                    - (timeMs % UPDATE_RATE_MS);
-                            updateTimeHandler
-                                    .sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs);
-                        }
-                        break;
-                }
-            }
-        };
-
-        private Paint createTextPaint(int defaultInteractiveColor) {
-            return createTextPaint(defaultInteractiveColor, NORMAL_TYPEFACE);
-        }
-
-        private Paint createTextPaint(int defaultInteractiveColor, Typeface typeface) {
-            Paint paint = new Paint();
-            paint.setColor(defaultInteractiveColor);
-            paint.setTypeface(typeface);
-            paint.setAntiAlias(true);
-            return paint;
+            drawer = new WatchFaceDrawer(resources);
         }
 
         @Override
@@ -173,16 +93,8 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
                 unregisterReceiver();
             }
 
-            updateTimer();
+            watchFaceTimer.onWatchFaceVisibilityChange();
         }
-
-        private void updateTimer() {
-            updateTimeHandler.removeMessages(MSG_UPDATE_TIME);
-            if (!isInAmbientMode()) {
-                updateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
-            }
-        }
-
 
         private void registerReceiver() {
             if (isTimeZoneReceiverRegistered) {
@@ -207,11 +119,10 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
             invalidate();
         }
 
-
         @Override
         public void onDestroy() {
             super.onDestroy();
-            updateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+            watchFaceTimer.onDestroy();
 
             if (googleApiClient.isConnected()) {
                 googleApiClient.disconnect();
@@ -230,36 +141,7 @@ public class BitcoinWatchFaceService extends CanvasWatchFaceService {
 
             final WatchFaceViewModel viewModel = viewModelFactory.createViewModel(time);
 
-            // draw background
-            backgroundPaint.setColor(isInAmbientMode() ? ambientBgColor : interactiveBgColor);
-            canvas.drawRect(0, 0, bounds.width(), bounds.height(), backgroundPaint);
-
-            // draw time
-            int centerX = bounds.centerX();
-            int centerY = bounds.centerY();
-
-            Rect hourBounds = new Rect();
-            timePaint.getTextBounds(viewModel.hourString, 0, viewModel.hourString.length(), hourBounds);
-
-            Rect minuteBounds = new Rect();
-            timePaint.getTextBounds(viewModel.minuteString, 0, viewModel.minuteString.length(), minuteBounds);
-
-            Rect bitcoinPriceBounds = new Rect();
-            bitcoinPricePaint.getTextBounds(viewModel.bitcoinPriceString, 0, viewModel.bitcoinPriceString.length(), bitcoinPriceBounds);
-
-            int timeX = centerX - minuteBounds.width() / 2;
-            float hourY = centerY - distanceHourMinute / 2;
-            float minuteY = centerY + minuteBounds.height() + distanceHourMinute / 2;
-
-            float bitcoinIconX = centerX - (bitcoinPriceBounds.width() + bitcoinIconSize) / 2;
-
-            canvas.drawText(viewModel.hourString, timeX, hourY, timePaint);
-            canvas.drawText(viewModel.minuteString, timeX, minuteY, timePaint);
-
-            // draw bitcoin price
-            float magicalOffsetToAlignTextWithIcon = distanceHourMinute / 2;
-            canvas.drawBitmap(bitcoinIcon, bitcoinIconX, bounds.bottom - bitcoinIconSize * 2 + magicalOffsetToAlignTextWithIcon, new Paint());
-            canvas.drawText(viewModel.bitcoinPriceString, bitcoinIconX + bitcoinIconSize, bounds.bottom - bitcoinIconSize, bitcoinPricePaint);
+            drawer.drawViewModelOnCanvas(viewModel, canvas, bounds, this);
         }
     }
 }
