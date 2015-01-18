@@ -28,7 +28,7 @@ public class HandheldNotifications {
         builder.setContentTitle("Bitcoin price update")
                 .setContentText("New Price: " + bitcoinPriceDTO.getBpi().getEur().rate)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setVibrate(new long[] {0, 1000, 50, 2000});
+                .setVibrate(new long[] { 100, 300, 100, 300});
 
         notificationManager.notify(1, builder.build());
     }
