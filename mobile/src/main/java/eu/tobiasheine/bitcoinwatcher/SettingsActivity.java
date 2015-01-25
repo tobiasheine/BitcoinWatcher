@@ -12,6 +12,7 @@ import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
 import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
@@ -24,7 +25,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     IWearableNotifications wearableNotifications;
 
     @Inject
-    HandheldNotifications handheldNotifications;
+    IHandheldNotifications handheldNotifications;
 
     @Inject
     ISynchronization synchronization;

@@ -46,4 +46,8 @@ public class BitcoinWatcherApplication extends Application {
     public static Dependencies getDependencies() {
         return INSTANCE.dependencies;
     }
+
+    public static void replaceDependencies(final Dependencies dependencies) {
+        INSTANCE.dependencies = dependencies;
+    }
 }
