@@ -23,6 +23,6 @@ public class TheDateUtils extends AndroidTestCase {
         String convertedString = DateUtils.convertCurrentPriceStringForWidget(price);
 
         // then
-        assertEquals("11:04 / 31.12.2014", convertedString);
+        assertEquals("12:04 / 31.12.2014", convertedString);
     }
 }

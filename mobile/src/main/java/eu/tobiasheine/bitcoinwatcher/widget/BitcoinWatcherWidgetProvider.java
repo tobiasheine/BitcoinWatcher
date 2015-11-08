@@ -36,15 +36,7 @@ public class BitcoinWatcherWidgetProvider extends AppWidgetProvider {
         remoteViewAdapter = new WidgetRemoteViewAdapter();
     }
 
-    public void setSettings(final Settings settings) {
-        this.settings = settings;
-    }
-
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
-
-    public void setRemoteViewAdapter(WidgetRemoteViewAdapter remoteViewAdapter) {
+    void setRemoteViewAdapter(WidgetRemoteViewAdapter remoteViewAdapter) {
         this.remoteViewAdapter = remoteViewAdapter;
     }
 
