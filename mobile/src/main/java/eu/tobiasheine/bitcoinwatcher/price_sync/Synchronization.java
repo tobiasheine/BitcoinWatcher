@@ -17,7 +17,7 @@ public class Synchronization implements ISynchronization{
 
         this.syncAccount = new Account("Sync Account", "eu.tobiasheine.bitcoinwatcher");
 
-        AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+        final AccountManager accountManager = (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
         accountManager.addAccountExplicitly(syncAccount, null, null);
 
         ContentResolver.setSyncAutomatically(

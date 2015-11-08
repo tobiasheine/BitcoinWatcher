@@ -2,6 +2,7 @@ package eu.tobiasheine.bitcoinwatcher;
 
 import android.app.Application;
 
+import eu.tobiasheine.bitcoinwatcher.di.BitcoinModule;
 import eu.tobiasheine.bitcoinwatcher.di.ContextModule;
 import eu.tobiasheine.bitcoinwatcher.di.DaggerDependencies;
 
@@ -25,6 +26,7 @@ public class BitcoinWatcherApplication extends Application {
                 settingsModule(new SettingsModule()).
                 synchronizationModule(new SynchronizationModule()).
                 notificationsModule(new NotificationsModule()).
+                bitcoinModule(new BitcoinModule()).
                 build();
 
 

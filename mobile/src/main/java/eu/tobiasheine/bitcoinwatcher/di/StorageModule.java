@@ -12,7 +12,7 @@ public class StorageModule {
 
     @Provides
     @Singleton
-    public IStorage provideStorage(final Storage storage) {
+    public IStorage provide(final Storage storage) {
         return storage;
     }
 }

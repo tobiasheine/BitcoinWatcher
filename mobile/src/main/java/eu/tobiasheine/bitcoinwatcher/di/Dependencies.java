@@ -8,6 +8,7 @@ import eu.tobiasheine.bitcoinwatcher.SettingsActivity;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.price_sync.BitcoinPriceHandler;
 import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
+import eu.tobiasheine.bitcoinwatcher.price_sync.SyncAdapter;
 import eu.tobiasheine.bitcoinwatcher.price_sync.SyncService;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
@@ -16,6 +17,7 @@ import eu.tobiasheine.bitcoinwatcher.widget.BitcoinWatcherWidgetProvider;
 
 @Singleton
 @Component(modules = {
+        BitcoinModule.class,
         ContextModule.class,
         SettingsModule.class,
         StorageModule.class,
@@ -31,6 +33,8 @@ public interface Dependencies {
     void inject(SyncService syncService);
 
     void inject(BitcoinPriceHandler bitcoinPriceHandler);
+
+    void inject(SyncAdapter syncAdapter);
 
     ISettings getSettings();
 

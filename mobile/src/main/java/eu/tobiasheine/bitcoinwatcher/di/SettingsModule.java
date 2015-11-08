@@ -12,7 +12,7 @@ public class SettingsModule {
 
     @Provides
     @Singleton
-    public ISettings provideSettings(final Settings settings) {
+    public ISettings provide(final Settings settings) {
         return settings;
     }
 

@@ -7,11 +7,8 @@ import android.os.IBinder;
 import javax.inject.Inject;
 
 import eu.tobiasheine.bitcoinwatcher.BitcoinWatcherApplication;
-import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
-import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 
 public class SyncService extends Service{
 
@@ -35,18 +32,14 @@ public class SyncService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
-
-        final Dependencies dependencies = BitcoinWatcherApplication.getDependencies();
-        dependencies.inject(this);
+        BitcoinWatcherApplication.getDependencies().inject(this);
 
         wearableNotifications.connect();
-
-        final BitcoinPriceHandler bitcoinPriceHandler = new BitcoinPriceHandler();
 
         synchronized (syncServiceLock) {
 
             if (syncAdapter == null) {
-                syncAdapter = new SyncAdapter(getApplicationContext(), true, bitcoinPriceHandler);
+                syncAdapter = new SyncAdapter(getApplicationContext(), true);
             }
         }
     }

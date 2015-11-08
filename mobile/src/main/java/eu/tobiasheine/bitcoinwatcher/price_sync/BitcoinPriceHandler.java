@@ -7,27 +7,25 @@ import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
-import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
-import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
-public class BitcoinPriceHandler {
+public class BitcoinPriceHandler implements IBitcoinPriceHandler {
+
+    private final IStorage storage;
+    private final ISettings settings;
+    private final IHandheldNotifications handheldNotifications;
+    private final IWearableNotifications wearableNotifications;
 
     @Inject
-    IStorage storage;
-    @Inject
-    ISettings settings;
-    @Inject
-    IHandheldNotifications handheldNotifications;
-    @Inject
-    IWearableNotifications wearableNotifications;
-
-    public BitcoinPriceHandler() {
-        BitcoinWatcherApplication.getDependencies().inject(this);
+    public BitcoinPriceHandler(IStorage storage, ISettings settings, IHandheldNotifications handheldNotifications, IWearableNotifications wearableNotifications) {
+        this.storage = storage;
+        this.settings = settings;
+        this.handheldNotifications = handheldNotifications;
+        this.wearableNotifications = wearableNotifications;
     }
 
+
+    @Override
     public void handleNewBitcoinPrice(final BitcoinPriceDTO newBitcoinPriceDTO) {
         final BitcoinPriceDTO latestBitcoinPriceDTO = storage.getStoredPrice();
 

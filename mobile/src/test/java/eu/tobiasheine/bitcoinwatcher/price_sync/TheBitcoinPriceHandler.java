@@ -34,19 +34,12 @@ public class TheBitcoinPriceHandler {
 
     @Before
     public void setUp() throws Exception {
-        final UtsDependencies dependencies = new UtsDependencies();
-        BitcoinWatcherApplication.replaceDependencies(dependencies);
-
-        storage = mock(Storage.class);
+        storage = mock(IStorage.class);
         handheldNotifications = mock(IHandheldNotifications.class);
         wearableNotifications = mock(IWearableNotifications.class);
         settings = mock(ISettings.class);
-        dependencies.replace(IStorage.class, storage);
-        dependencies.replace(IHandheldNotifications.class, handheldNotifications);
-        dependencies.replace(IWearableNotifications.class, wearableNotifications);
-        dependencies.replace(ISettings.class, settings);
 
-        priceUpdater = new BitcoinPriceHandler();
+        priceUpdater = new BitcoinPriceHandler(storage,settings,handheldNotifications,wearableNotifications);
     }
 
     @Test

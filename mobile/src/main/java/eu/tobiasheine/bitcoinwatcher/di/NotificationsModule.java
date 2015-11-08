@@ -25,7 +25,7 @@ public class NotificationsModule {
 
     //No singleton since it has a lifecycle
     @Provides
-    public IWearableNotifications provideSettings(final WearableNotifications wearableNotifications) {
+    public IWearableNotifications provideWearableNotifications(final WearableNotifications wearableNotifications) {
         return wearableNotifications;
     }
 
