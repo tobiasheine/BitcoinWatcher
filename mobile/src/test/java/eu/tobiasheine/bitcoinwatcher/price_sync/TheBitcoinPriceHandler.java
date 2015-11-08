@@ -1,21 +1,23 @@
 package eu.tobiasheine.bitcoinwatcher.price_sync;
 
-import android.test.AndroidTestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinBpiDTO;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceBpiDTO;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class TheBitcoinPriceHandler extends AndroidTestCase {
+public class TheBitcoinPriceHandler {
 
     private Storage storage;
     private HandheldNotifications handheldNotifications;
@@ -24,10 +26,8 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
 
     private BitcoinPriceHandler priceUpdater;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
-
         storage = mock(Storage.class);
         handheldNotifications = mock(HandheldNotifications.class);
         wearableNotifications = mock(WearableNotifications.class);
@@ -36,7 +36,8 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
         priceUpdater = new BitcoinPriceHandler(storage, handheldNotifications, settings, wearableNotifications);
     }
 
-    public void testStoresNewPriceOnUpdate() throws Exception {
+    @Test
+    public void storesNewPriceOnUpdate() throws Exception {
         // given
         final BitcoinPriceDTO newPrice = mock(BitcoinPriceDTO.class);
 
@@ -47,7 +48,8 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
         verify(storage).storeNewPrice(newPrice);
     }
 
-    public void testNotifyWidgetAndWearableOnUpdate() throws Exception {
+    @Test
+    public void notifyWidgetAndWearableOnUpdate() throws Exception {
         // given
         final BitcoinPriceDTO newPrice = mock(BitcoinPriceDTO.class);
 
@@ -59,7 +61,8 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
         verify(wearableNotifications).notifyWearable();
     }
 
-    public void testNotifyWhenPriceChangeEqualsLimit() throws Exception {
+    @Test
+    public void notifyWhenPriceChangeEqualsLimit() throws Exception {
         // given
         final int priceLimit = 10;
         final float lastRate = 150f;
@@ -77,7 +80,8 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
         verify(handheldNotifications).notifyAboutNewPrice(newPrice);
     }
 
-    public void testNotifyWhenPriceChangeIsPositiveAndMoreThanLimit() throws Exception {
+    @Test
+    public void notifyWhenPriceChangeIsPositiveAndMoreThanLimit() throws Exception {
         // given
         final int priceLimit = 10;
         final float lastRate = 150f;
@@ -95,7 +99,7 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
         verify(handheldNotifications).notifyAboutNewPrice(newPrice);
     }
 
-    public void testNotifyWhenPriceChangeIsNegativeAndMoreThanLimit() throws Exception {
+    public void notifyWhenPriceChangeIsNegativeAndMoreThanLimit() throws Exception {
         // given
         final int priceLimit = 10;
         final float lastRate = 150f;
@@ -113,7 +117,8 @@ public class TheBitcoinPriceHandler extends AndroidTestCase {
         verify(handheldNotifications).notifyAboutNewPrice(newPrice);
     }
 
-    public void testDoNotNotifiyWhenPriceChangeIsBelowLimit() throws Exception {
+    @Test
+    public void doNotNotifiyWhenPriceChangeIsBelowLimit() throws Exception {
         // given
         final int priceLimit = 10;
         final float lastRate = 150f;

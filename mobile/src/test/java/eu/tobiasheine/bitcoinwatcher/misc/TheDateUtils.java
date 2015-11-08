@@ -1,16 +1,18 @@
 package eu.tobiasheine.bitcoinwatcher.misc;
 
-import android.test.AndroidTestCase;
+import org.junit.Test;
 
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceUpdatedAtDTO;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TheDateUtils extends AndroidTestCase {
+public class TheDateUtils {
 
-    public void testConvertsDateForWidget() throws Exception {
+    @Test
+    public void convertsDateForWidget() throws Exception {
         // given
         final String dateString = "Dec 31, 2014 11:04:00 UTC";
 
