@@ -3,7 +3,8 @@ package eu.tobiasheine.bitcoinwatcher;
 import android.app.Application;
 
 import eu.tobiasheine.bitcoinwatcher.di.ContextModule;
-import eu.tobiasheine.bitcoinwatcher.di.Dagger_Dependencies;
+import eu.tobiasheine.bitcoinwatcher.di.DaggerDependencies;
+
 import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
 import eu.tobiasheine.bitcoinwatcher.di.GoogleApiClientModule;
 import eu.tobiasheine.bitcoinwatcher.di.HandheldNotificationsModule;
@@ -11,9 +12,7 @@ import eu.tobiasheine.bitcoinwatcher.di.SettingsModule;
 import eu.tobiasheine.bitcoinwatcher.di.SynchronizationModule;
 import eu.tobiasheine.bitcoinwatcher.di.WearableNotificationsModule;
 import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
-import eu.tobiasheine.bitcoinwatcher.price_sync.Synchronization;
 import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
-import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 public class BitcoinWatcherApplication extends Application {
 
@@ -26,7 +25,7 @@ public class BitcoinWatcherApplication extends Application {
         super.onCreate();
         INSTANCE = this;
 
-        dependencies = Dagger_Dependencies.builder().
+        dependencies = DaggerDependencies.builder().
                 contextModule(new ContextModule(this)).
                 settingsModule(new SettingsModule()).
                 synchronizationModule(new SynchronizationModule()).
