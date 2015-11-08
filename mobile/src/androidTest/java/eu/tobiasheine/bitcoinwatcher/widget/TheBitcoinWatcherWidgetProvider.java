@@ -5,14 +5,11 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 import android.widget.RemoteViews;
 
+import eu.tobiasheine.bitcoinwatcher.di.UtsDependencies;
 import eu.tobiasheine.bitcoinwatcher.BitcoinWatcherApplication;
 import eu.tobiasheine.bitcoinwatcher.R;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
-import eu.tobiasheine.bitcoinwatcher.di.UtsDependencies;
-import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 import eu.tobiasheine.bitcoinwatcher.widget.ui.BitcoinWatcherWidgetViewModel;

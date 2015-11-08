@@ -12,7 +12,7 @@ import static org.mockito.Mockito.mock;
 
 abstract class MockDependencies {
 
-    private final Map<Class<?>,InjectedComponent<?>> dependencies = new HashMap<>();
+    private final Map<Class<?>, InjectedComponent<?>> dependencies = new HashMap<>();
 
     protected void replaceDependencies(Object component) {
         for (final Field field : component.getClass().getDeclaredFields()) {
