@@ -1,5 +1,8 @@
 package eu.tobiasheine.bitcoinwatcher.price_sync;
 
+import javax.inject.Inject;
+
+import eu.tobiasheine.bitcoinwatcher.BitcoinWatcherApplication;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
@@ -12,16 +15,17 @@ import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 public class BitcoinPriceHandler {
 
-    private final IStorage storage;
-    private final ISettings settings;
-    private final IHandheldNotifications handheldNotifications;
-    private final IWearableNotifications wearableNotifications;
+    @Inject
+    IStorage storage;
+    @Inject
+    ISettings settings;
+    @Inject
+    IHandheldNotifications handheldNotifications;
+    @Inject
+    IWearableNotifications wearableNotifications;
 
-    public BitcoinPriceHandler(final IStorage storage, final IHandheldNotifications handheldNotifications, final ISettings settings, final IWearableNotifications wearableNotifications) {
-        this.storage = storage;
-        this.handheldNotifications = handheldNotifications;
-        this.settings = settings;
-        this.wearableNotifications = wearableNotifications;
+    public BitcoinPriceHandler() {
+        BitcoinWatcherApplication.getDependencies().inject(this);
     }
 
     public void handleNewBitcoinPrice(final BitcoinPriceDTO newBitcoinPriceDTO) {

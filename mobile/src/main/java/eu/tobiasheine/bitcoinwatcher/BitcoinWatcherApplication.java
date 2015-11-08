@@ -6,32 +6,25 @@ import eu.tobiasheine.bitcoinwatcher.di.ContextModule;
 import eu.tobiasheine.bitcoinwatcher.di.DaggerDependencies;
 
 import eu.tobiasheine.bitcoinwatcher.di.Dependencies;
-import eu.tobiasheine.bitcoinwatcher.di.GoogleApiClientModule;
-import eu.tobiasheine.bitcoinwatcher.di.HandheldNotificationsModule;
+import eu.tobiasheine.bitcoinwatcher.di.NotificationsModule;
 import eu.tobiasheine.bitcoinwatcher.di.SettingsModule;
 import eu.tobiasheine.bitcoinwatcher.di.SynchronizationModule;
-import eu.tobiasheine.bitcoinwatcher.di.WearableNotificationsModule;
 import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
 import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 
 public class BitcoinWatcherApplication extends Application {
 
-    private static BitcoinWatcherApplication INSTANCE;
-
-    private Dependencies dependencies;
+    private static Dependencies dependencies;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        INSTANCE = this;
 
         dependencies = DaggerDependencies.builder().
                 contextModule(new ContextModule(this)).
                 settingsModule(new SettingsModule()).
                 synchronizationModule(new SynchronizationModule()).
-                handheldNotificationsModule(new HandheldNotificationsModule()).
-                googleApiClientModule(new GoogleApiClientModule(this)).
-                wearableNotificationsModule(new WearableNotificationsModule()).
+                notificationsModule(new NotificationsModule()).
                 build();
 
 
@@ -43,10 +36,10 @@ public class BitcoinWatcherApplication extends Application {
     }
 
     public static Dependencies getDependencies() {
-        return INSTANCE.dependencies;
+        return dependencies;
     }
 
     public static void replaceDependencies(final Dependencies dependencies) {
-        INSTANCE.dependencies = dependencies;
+        BitcoinWatcherApplication.dependencies = dependencies;
     }
 }

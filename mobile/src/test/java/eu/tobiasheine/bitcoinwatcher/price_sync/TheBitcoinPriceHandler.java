@@ -3,12 +3,18 @@ package eu.tobiasheine.bitcoinwatcher.price_sync;
 import org.junit.Before;
 import org.junit.Test;
 
+import eu.tobiasheine.bitcoinwatcher.BitcoinWatcherApplication;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinBpiDTO;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceBpiDTO;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
+import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
 import eu.tobiasheine.bitcoinwatcher.dao.storage.Storage;
+import eu.tobiasheine.bitcoinwatcher.di.UtsDependencies;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.HandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
+import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IWearableNotifications;
 import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.WearableNotifications;
+import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.settings.Settings;
 
 import static org.junit.Assert.*;
@@ -19,21 +25,28 @@ import static org.mockito.Mockito.when;
 
 public class TheBitcoinPriceHandler {
 
-    private Storage storage;
-    private HandheldNotifications handheldNotifications;
-    private Settings settings;
-    private WearableNotifications wearableNotifications;
+    private IStorage storage;
+    private IHandheldNotifications handheldNotifications;
+    private ISettings settings;
+    private IWearableNotifications wearableNotifications;
 
     private BitcoinPriceHandler priceUpdater;
 
     @Before
     public void setUp() throws Exception {
-        storage = mock(Storage.class);
-        handheldNotifications = mock(HandheldNotifications.class);
-        wearableNotifications = mock(WearableNotifications.class);
-        settings = mock(Settings.class);
+        final UtsDependencies dependencies = new UtsDependencies();
+        BitcoinWatcherApplication.replaceDependencies(dependencies);
 
-        priceUpdater = new BitcoinPriceHandler(storage, handheldNotifications, settings, wearableNotifications);
+        storage = mock(Storage.class);
+        handheldNotifications = mock(IHandheldNotifications.class);
+        wearableNotifications = mock(IWearableNotifications.class);
+        settings = mock(ISettings.class);
+        dependencies.replace(IStorage.class, storage);
+        dependencies.replace(IHandheldNotifications.class, handheldNotifications);
+        dependencies.replace(IWearableNotifications.class, wearableNotifications);
+        dependencies.replace(ISettings.class, settings);
+
+        priceUpdater = new BitcoinPriceHandler();
     }
 
     @Test

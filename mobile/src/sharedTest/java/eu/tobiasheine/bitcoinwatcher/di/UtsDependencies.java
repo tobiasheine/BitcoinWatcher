@@ -1,10 +1,9 @@
 package eu.tobiasheine.bitcoinwatcher.di;
 
 import eu.tobiasheine.bitcoinwatcher.SettingsActivity;
-import eu.tobiasheine.bitcoinwatcher.dao.storage.IStorage;
+import eu.tobiasheine.bitcoinwatcher.price_sync.BitcoinPriceHandler;
 import eu.tobiasheine.bitcoinwatcher.price_sync.ISynchronization;
 import eu.tobiasheine.bitcoinwatcher.price_sync.SyncService;
-import eu.tobiasheine.bitcoinwatcher.price_sync.notifications.IHandheldNotifications;
 import eu.tobiasheine.bitcoinwatcher.settings.ISettings;
 import eu.tobiasheine.bitcoinwatcher.widget.BitcoinWatcherWidgetProvider;
 
@@ -26,18 +25,13 @@ public class UtsDependencies extends MockDependencies implements Dependencies {
     }
 
     @Override
-    public IStorage getStorage() {
-        return getDependencyOrMock(IStorage.class);
+    public void inject(BitcoinPriceHandler bitcoinPriceHandler) {
+        replaceDependencies(bitcoinPriceHandler);
     }
 
     @Override
     public ISettings getSettings() {
         return getDependencyOrMock(ISettings.class);
-    }
-
-    @Override
-    public IHandheldNotifications getHandheldNotifications() {
-        return getDependencyOrMock(IHandheldNotifications.class);
     }
 
     @Override

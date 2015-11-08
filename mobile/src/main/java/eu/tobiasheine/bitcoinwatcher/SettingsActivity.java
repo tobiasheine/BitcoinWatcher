@@ -93,20 +93,4 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
         wearableNotifications.disconnect();
     }
-
-    public void setSynchronization(final Synchronization synchronization) {
-        this.synchronization = synchronization;
-    }
-
-    public void setSettings(final Settings settings) {
-        this.settings = settings;
-    }
-
-    public void setHandheldNotifications(final HandheldNotifications handheldNotifications) {
-        this.handheldNotifications = handheldNotifications;
-    }
-
-    public void setWearableNotifications(final WearableNotifications wearableNotifications) {
-        this.wearableNotifications = wearableNotifications;
-    }
 }

@@ -41,11 +41,7 @@ public class SyncService extends Service{
 
         wearableNotifications.connect();
 
-        final IStorage storage = dependencies.getStorage();
-        final IHandheldNotifications handheldNotifications = dependencies.getHandheldNotifications();
-        final ISettings settings = dependencies.getSettings();
-
-        final BitcoinPriceHandler bitcoinPriceHandler = new BitcoinPriceHandler(storage, handheldNotifications, settings, wearableNotifications);
+        final BitcoinPriceHandler bitcoinPriceHandler = new BitcoinPriceHandler();
 
         synchronized (syncServiceLock) {
 
