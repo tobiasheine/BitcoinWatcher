@@ -3,6 +3,8 @@ package eu.tobiasheine.bitcoinwatcher.widget.ui;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Locale;
+
 import eu.tobiasheine.bitcoinwatcher.R;
 import eu.tobiasheine.bitcoinwatcher.misc.DateUtils;
 import eu.tobiasheine.bitcoinwatcher.api.dto.BitcoinPriceDTO;
@@ -23,7 +25,7 @@ public class BitcoinWatcherViewModelFactory {
             updatedAt = DateUtils.convertCurrentPriceStringForWidget(bitcoinPriceDTO);
 
         } catch (Exception e) {
-            Log.e("BitcoinWatcherViewModelFactory", Log.getStackTraceString(e));
+            Log.e("ViewModelFactory", Log.getStackTraceString(e));
         }
 
         final Currency selectedCurrency = settings.getSelectedCurrency();
